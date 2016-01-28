@@ -1,7 +1,7 @@
 # jsgrest
 Postgres REST API server in JavaScript (a la PostgREST).
 
-This is a bare-bones reimplementation of @begriff's fantastic PostgREST in JavaScript.
+This is a bare-bones reimplementation of [@begriffs](https://github.com/begriffs)'s fantastic [PostgREST](https://github.com/begriffs/postgrest) in JavaScript.
 
 # Goals
 * Maximum API compatibility with PostgREST
