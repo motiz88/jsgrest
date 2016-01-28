@@ -10,7 +10,7 @@ This is a bare-bones reimplementation of @begriff's fantastic PostgREST in JavaS
 
 # Progress
 I'm just starting out here. Please feel free to reach out in any way you like.
-My first focus will be a reduced core feature set - just basic reading, writing with some tests.
+My first focus will be a reduced core feature set - mostly just basic reading and writing. See the [Specification](https://github.com/motiz88/jsgrest/wiki/Specification) for details.
 
 # And hey...
 ...at least I didn't call it *PostgrESt*.
