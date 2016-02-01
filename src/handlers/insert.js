@@ -2,7 +2,7 @@ import wrap from '../wrap';
 import requestToQualifiedRelationQuoted from '../query/requestToQualifiedRelationQuoted';
 import pgEscape from 'pg-escape';
 
-export default wrap(async function insertHandler(req, res, next) {
+export default wrap(async function insertHandler(req, res) {
     const qualifiedRelationQuoted = requestToQualifiedRelationQuoted(req);
     if (!req.body)
         return res.sendStatus(400);

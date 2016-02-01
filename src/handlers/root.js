@@ -1,6 +1,6 @@
 import wrap from '../wrap';
 
-export default wrap(async function rootHandler(req, res, next) {
+export default wrap(async function rootHandler(req, res) {
     const accessibleTablesQuery = `select
         n.nspname as schema,
         relname as name,

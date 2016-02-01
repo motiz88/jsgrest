@@ -4,7 +4,7 @@ import requestToWhereClause from '../query/requestToWhereClause';
 import requestToOrderClause from '../query/requestToOrderClause';
 import requestToOffsetLimitClause from '../query/requestToOffsetLimitClause';
 
-export default wrap(async function selectHandler(req, res, next) {
+export default wrap(async function selectHandler(req, res) {
     const qualifiedRelationQuoted = requestToQualifiedRelationQuoted(req);
     const whereClause = requestToWhereClause(req);
     const orderClause = requestToOrderClause(req);

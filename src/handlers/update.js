@@ -3,7 +3,7 @@ import requestToQualifiedRelationQuoted from '../query/requestToQualifiedRelatio
 import requestToWhereClause from '../query/requestToWhereClause';
 import pgEscape from 'pg-escape';
 
-export default wrap(async function updateHandler(req, res, next) {
+export default wrap(async function updateHandler(req, res) {
     const qualifiedRelationQuoted = requestToQualifiedRelationQuoted(req);
     if (!req.body)
         return res.sendStatus(400);

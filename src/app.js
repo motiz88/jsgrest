@@ -1,7 +1,6 @@
 import express from 'express';
 import sendSelectQuery from './res/sendSelectQuery';
 import execQuery from './res/execQuery';
-import wrap from './wrap';
 import rootHandler from './handlers/root';
 import selectHandler from './handlers/select';
 import insertHandler from './handlers/insert';
