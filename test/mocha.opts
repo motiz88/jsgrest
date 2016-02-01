@@ -1,0 +1,7 @@
+--compilers js:./test/utils/babel-register
+--require babel-polyfill
+--recursive
+--require source-map-support/register
+--reporter spec
+--invert
+--fgrep TODO:

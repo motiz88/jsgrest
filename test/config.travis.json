@@ -1,0 +1,6 @@
+{
+    "database": {
+        "connectionString": "postgres://postgres@/",
+        "psql": "psql"
+    }
+}

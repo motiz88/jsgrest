@@ -1,0 +1,6 @@
+{
+    "database": {
+        "connectionString": "postgres://localhost/",
+        "psql": "c:\\program files\\postgresql\\9.4\\bin\\psql"
+    }
+}

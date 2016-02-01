@@ -20,3 +20,8 @@ max_line_length = undefined
 
 [{package.json,.eslintrc}]
 indent_size = 2
+
+[*.sql]
+indent_size = undefined
+max_line_length = undefined
+indent_style = undefined
