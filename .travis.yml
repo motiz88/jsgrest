@@ -21,3 +21,7 @@ before_script:
   - cp test/config.travis.json test/config.json
 services:
   - postgresql
+cache:
+  directories:
+    - node_modules
+sudo: false
