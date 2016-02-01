@@ -39,6 +39,7 @@
     "chai-things": "^0.2.0",
     "chokidar-cli": "^1.2.0",
     "cross-env": "^1.0.7",
+    "dependency-check": "^2.5.1",
     "documentation": "^3.0.4",
     "eclint": "^1.1.5",
     "editorconfig-tools": "^0.1.1",
