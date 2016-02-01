@@ -1,4 +1,4 @@
-import chai, {expect} from 'chai';
+import chai from 'chai';
 import createApp from '../../src/app';
 import dbFixtures from '../utils/dbFixtures';
 
@@ -95,7 +95,7 @@ describe('Query', function() {
 
         it('matches nulls using not operator', async function() {
             const res = await chai.request(app).get('/no_pk?a=not.is.null');
-            res.body.should.deep.equal([{'a':"1",'b':"0"},{'a':"2",'b':"0"}]);
+            res.body.should.deep.equal([{a: '1', b: '0'}, {a: '2', b: '0'}]);
         });
 
         it('matches nulls in varchar and numeric fields alike', async function() {
@@ -348,17 +348,19 @@ describe('Query', function() {
         it('can select by column name', async function() {
             const res = await chai.request(app)
                 .get('/projects?id=in.1,3&select=id,name,client_id,client_id{id,name}');
-            res.body.should.deep.equal([{id: 1, name: 'Windows 7', client_id: 1,
+            res.body.should.deep.equal(`[{id: 1, name: 'Windows 7', client_id: 1,
                 client_id: {id: 1, name: 'Microsoft'}},
-                {id: 3, name: 'IOS', client_id: 2, client_id: {id: 2, name: 'Apple'}}]);
+                {id: 3, name: 'IOS', client_id: 2, client_id: {id: 2, name: 'Apple'}}]`);
+            //FIXME: duplicate key client_id, determine what this case should really be
         });
 
         it('can select by column name sans id', async function() {
             const res = await chai.request(app)
                 .get('/projects?id=in.1,3&select=id,name,client_id,client{id,name}');
-            res.body.should.deep.equal([{id: 1, name: 'Windows 7', client_id: 1,
+            res.body.should.deep.equal(`[{id: 1, name: 'Windows 7', client_id: 1,
                 client: {id: 1, name: 'Microsoft'}},
-                {id: 3, name: 'IOS', client_id: 2, client: {id: 2, name: 'Apple'}}]);
+                {id: 3, name: 'IOS', client_id: 2, client: {id: 2, name: 'Apple'}}]`);
+            //FIXME: duplicate key client_id, determine what this case should really be
         });
     });
 
@@ -390,7 +392,7 @@ describe('Query', function() {
                 .get('/projects_view?id=eq.1&select=id,name,clients{*},tasks{id,name}')
                 .set('Prefer', 'plurality=singular');
 
-            res.body.should.deep.equal({id: 1, name: 'Windows 7'
+            res.body.should.deep.equal({id: 1, name: 'Windows 7',
                 clients: {id: 1, name: 'Microsoft'},
                 tasks: [{id: 1, name: 'Design w7'}, {id: 2, name: 'Code w7'}]});
         });

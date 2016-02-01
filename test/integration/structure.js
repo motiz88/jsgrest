@@ -1,4 +1,4 @@
-import chai, {expect} from 'chai';
+import chai from 'chai';
 import createApp from '../../src/app';
 import dbFixtures from '../utils/dbFixtures';
 
@@ -72,7 +72,7 @@ describe('GET --> SELECT', function() {
 
     describe('TODO: Table info', function() {
         it('is available with OPTIONS verb', async function() {
-            const res = await request(app).options('/menagerie');
+            const res = await chai.request(app).options('/menagerie');
             res.should.have.status(200);
             res.body.should.deep.equal({
                 pkey: ['integer'],
@@ -87,8 +87,7 @@ describe('GET --> SELECT', function() {
                     enum: [],
                     nullable: false,
                     position: 1,
-                    references: null,
-                    default: null
+                    references: null
                 }, {
                     default: null,
                     precision: 53,
@@ -112,8 +111,7 @@ describe('GET --> SELECT', function() {
                     enum: [],
                     nullable: false,
                     position: 3,
-                    references: null,
-                    default: null
+                    references: null
                 }, {
                     default: null,
                     precision: null,
@@ -149,8 +147,7 @@ describe('GET --> SELECT', function() {
                     enum: [],
                     nullable: false,
                     position: 6,
-                    references: null,
-                    default: null
+                    references: null
                 }, {
                     default: null,
                     precision: null,
@@ -165,14 +162,13 @@ describe('GET --> SELECT', function() {
                     ],
                     nullable: false,
                     position: 7,
-                    references: null,
-                    default: null
+                    references: null
                 }]
             });
         });
 
         it('it includes primary and foreign keys for views', async function() {
-            const res = await request(app).options('/projects_view');
+            const res = await chai.request(app).options('/projects_view');
             res.should.have.status(200);
             res.body.should.deep.equal({
                 pkey: ['id'],
@@ -221,7 +217,7 @@ describe('GET --> SELECT', function() {
         });
 
         it('includes foreign key data', async function() {
-            const res = await request(app).options('/has_fk');
+            const res = await chai.request(app).options('/has_fk');
             res.should.have.status(200);
             res.body.should.deep.equal({
                 pkey: ['id'],
@@ -275,7 +271,7 @@ describe('GET --> SELECT', function() {
 
         it('includes all information on views for renamed columns, '
             + 'and raises relations to correct schema', async function() {
-            const res = await request(app).options('/articleStars');
+            const res = await chai.request(app).options('/articleStars');
             res.should.have.status(200);
             res.body.should.deep.equal({
                 pkey: [
