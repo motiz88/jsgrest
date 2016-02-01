@@ -23,5 +23,5 @@ services:
   - postgresql
 cache:
   directories:
-    - node_modules
+    - $HOME/.npm
 sudo: false
