@@ -25,3 +25,12 @@ indent_size = 2
 indent_size = undefined
 max_line_length = undefined
 indent_style = undefined
+
+[*.log] # ignore
+end_of_line = undefined
+insert_final_newline = undefined
+charset = undefined
+indent_style = undefined
+indent_size = undefined
+trim_trailing_whitespace = undefined
+max_line_length = undefined
