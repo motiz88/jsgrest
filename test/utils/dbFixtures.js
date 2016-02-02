@@ -30,7 +30,7 @@ class TestDb {
                 resolve();
             }));
 
-        const psqlBanner = await child_process.exec(shellEscape `${testConfig.database.psql} --version`;
+        const psqlBanner = await child_process.exec(shellEscape `${testConfig.database.psql} --version`);
 
 
         if (this.setupCount === 0) {
