@@ -1,3 +1,5 @@
+SET client_min_messages TO WARNING;
+
 -- Privileges for anonymous
 GRANT USAGE ON SCHEMA
       postgrest

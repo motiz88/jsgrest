@@ -1,3 +1,5 @@
+SET client_min_messages TO WARNING;
+
 DROP DATABASE IF EXISTS postgrest_test;
 DROP ROLE IF EXISTS postgrest_test;
 CREATE USER postgrest_test createdb createrole;

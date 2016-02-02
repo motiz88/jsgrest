@@ -1,3 +1,5 @@
+SET client_min_messages TO WARNING;
+
 DROP ROLE IF EXISTS postgrest_test_authenticator, postgrest_test_anonymous, postgrest_test_default_role, postgrest_test_author;
 CREATE ROLE postgrest_test_authenticator WITH login noinherit;
 CREATE ROLE postgrest_test_anonymous;
