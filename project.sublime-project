@@ -3,7 +3,8 @@
     [
         {
             "path": ".",
-            "folder_exclude_patterns": ["node_modules", "dist"]
+            "folder_exclude_patterns": ["node_modules", "dist"],
+            "file_exclude_patterns": [".babel-cache"]
         }
     ]
 }
