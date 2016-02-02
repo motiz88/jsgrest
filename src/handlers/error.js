@@ -6,4 +6,4 @@ export default function errorHandler(err, req, res, next) {
     }
     const status = errorToHttpStatus(err);
     res.status(status || 500);
-};
+}
