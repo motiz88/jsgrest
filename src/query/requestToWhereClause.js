@@ -4,7 +4,7 @@ import XRegExp from 'xregexp';
 const conditionRegex = XRegExp(`
     ^ # start of value
     (?<not> not \.)?
-    (?<operator>  eq|gte?|lte?|i?like|@@|is|in )
+    (?<operator>  n?eq|gte?|lte?|i?like|@@|isnot|is|in|<@|@>|notin )
     \.
     (?<rhs> .*)
     $
