@@ -27,4 +27,6 @@ cache:
     - $HOME/.npm
     - node_modules
     - $BABEL_CACHE_PATH
+    - $HOME/.nvm
+    - $NVM_DIR
 sudo: false
