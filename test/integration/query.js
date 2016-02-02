@@ -149,14 +149,14 @@ describe('Query', function() {
             }]);
         });
 
-        it('matches with computed column', async function() {
+        it('TODO: matches with computed column', async function() {
             const res = await chai.request(app).get('/items?always_true=eq.true&order=id.asc');
             res.body.should.deep.equal([{id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}, {id: 6},
                 {id: 7}, {id: 8}, {id: 9}, {id: 10}, {id: 11}, {id: 12}, {id: 13},
                 {id: 14}, {id: 15}]);
         });
 
-        it('order by computed column', async function() {
+        it('TODO: order by computed column', async function() {
             const res = await chai.request(app).get('/items?order=anti_id.desc');
             res.body.should.deep.equal([{id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}, {id: 6},
                 {id: 7}, {id: 8}, {id: 9}, {id: 10}, {id: 11}, {id: 12}, {id: 13},
@@ -200,12 +200,12 @@ describe('Query', function() {
             }]);
         });
 
-        it('matches with @> operator', async function() {
+        it('TODO: matches with @> operator', async function() {
             const res = await chai.request(app).get('/complex_items?select=id&arr_data=@>.{2}');
             res.body.should.deep.equal([{id: 2}, {id: 3}]);
         });
 
-        it('matches with <@ operator', async function() {
+        it('TODO: matches with <@ operator', async function() {
             const res = await chai.request(app).get('/complex_items?select=id&arr_data=<@.{1,2,4}');
             res.body.should.deep.equal([{id: 1}, {id: 2}]);
         });
