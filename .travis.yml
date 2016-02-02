@@ -1,6 +1,6 @@
 language: node_js
 env:
-  - CXX=g++-4.8 BABEL_CACHE_PATH=$HOME/.babel-cache
+  - CXX=g++-4.8 BABEL_CACHE_PATH=$HOME/.babel-cache/cache
 addons:
   apt:
     sources:
@@ -27,7 +27,7 @@ cache:
   directories:
     - $HOME/.npm
     - node_modules
-    - $BABEL_CACHE_PATH
+    - $HOME/.babel-cache
     - $HOME/.nvm
     - $NVM_DIR
 sudo: false
