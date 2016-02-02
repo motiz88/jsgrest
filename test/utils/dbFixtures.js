@@ -39,7 +39,8 @@ class TestDb {
                 console.error(psqlBanner[1]);
             await execSqlFile(require.resolve('../fixtures/database.sql'),
                 testConfig.database.connectionString);
-            await execSqlFile(require.resolve('../fixtures/schema.sql'));
+            for (const script of ['roles.sql', 'schema.sql', 'privileges.sql'])
+                await execSqlFile(require.resolve(`../fixtures/${script}`));
             this.firstSetup = false;
         }
 
