@@ -20,7 +20,7 @@ class TestDb {
 
     async setup() {
         await new Promise(
-            (resolve, reject) => pg.connect(this.connectionString, (err, client, done) => {
+            (resolve, reject) => pg.connect(testConfig.database.connectionString, (err, client, done) => {
                 if (err) {
                     done();
                     return reject(err);
@@ -57,7 +57,7 @@ class TestDb {
         --this.setupCount;
     }
 
-    connectionString = testConfig.database.connectionString;
+    connectionString = testConfig.database.connectionStringWithDatabase;
     setupCount = 0;
     firstSetup = true;
 }
