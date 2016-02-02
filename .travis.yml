@@ -15,11 +15,12 @@ node_js:
   - "0.12"
 before_script:
   - npm prune --production=false
+  - cp test/config.travis.json test/config.json
+after_script:
   - npm install -g eclint
   - npm run eclint
   - npm install -g eslint
   - npm run eslint
-  - cp test/config.travis.json test/config.json
 services:
   - postgresql
 cache:
