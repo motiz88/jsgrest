@@ -1,5 +1,3 @@
-\c postgrest_test;
-
 --
 -- PostgreSQL database dump
 --
