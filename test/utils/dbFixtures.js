@@ -4,9 +4,9 @@ import {exec} from 'mz/child_process';
 import shellEscape from 'shell-escape-tag';
 
 async function execSqlFile(file, connectionString) {
-    const [stdout, stderr] = await exec(shellEscape `${testConfig.database.psql} --file=${file}
-        --set=client_min_messages=warning
-        ${connectionString || testConfig.database.connectionStringWithDatabase}`);
+    const [stdout, stderr] = await exec(shellEscape `${testConfig.database.psql} --file=${file}`
+        + ' --set client_min_messages=warning'
+        + shellEscape ` ${connectionString || testConfig.database.connectionStringWithDatabase}`);
     if (stderr)
         throw new Error(stderr);
     return stdout;
