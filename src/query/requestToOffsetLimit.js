@@ -1,5 +1,3 @@
-import pgEscape from 'pg-escape';
-
 export default function requestToOffsetLimit(req) {
     if (req.range && req.range.unit === 'items') {
         const offset = typeof req.range.first === 'number' ? req.range.first : undefined;

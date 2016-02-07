@@ -1,4 +1,3 @@
-import wrap from '../wrap';
 import requestToQualifiedRelationQuoted from '../query/requestToQualifiedRelationQuoted';
 import requestToWhereClause from '../query/requestToWhereClause';
 import requestToOrderClause from '../query/requestToOrderClause';

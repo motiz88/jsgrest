@@ -15,7 +15,8 @@ after(async function() {
 });
 
 describe('Range', function() {
-    let app, appServer, appFetch = (path, ...args) => fetch(serverAddress(appServer, path), ...args);
+    let app, appServer,
+        appFetch = (path, ...args) => fetch(serverAddress(appServer, path), ...args);
     before(function() {
         app = createApp({
             connectionString: dbFixtures.connectionString,

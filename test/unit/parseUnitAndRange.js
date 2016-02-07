@@ -24,6 +24,7 @@ describe('parseUnitAndRange', function() {
     });
 
     it('items 5-', function() {
-        parseUnitAndRange('items', '5-').should.deep.equal({unit: 'items', first: 5, last: Infinity});
+        parseUnitAndRange('items', '5-')
+            .should.deep.equal({unit: 'items', first: 5, last: Infinity});
     });
 });

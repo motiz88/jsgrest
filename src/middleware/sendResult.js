@@ -1,4 +1,3 @@
-import wrap from '../wrap';
 import formatContentRange from '../formatContentRange';
 
 function rangeStatus({first, last, length}) {

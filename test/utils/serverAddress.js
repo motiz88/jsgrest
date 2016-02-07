@@ -6,9 +6,7 @@ export default function serverAddress(app, path) {
         return app + path;
     }
 
-    const server = ('function' === typeof app)
-      ? http.createServer(app)
-      : app;
+    const server = ('function' === typeof app) ? http.createServer(app) : app;
 
     var addr = server.address();
     if (!addr) {
