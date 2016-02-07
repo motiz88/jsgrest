@@ -75,7 +75,7 @@ describe('Range', function() {
                 it('succeeds with partial content', async function() {
                     const res = await chai.request(app).get('/items')
                         .set('Range', '0-1')
-                        .set('Range-Units', 'items');
+                        .set('Range-Unit', 'items');
                     res.should.have.status(206);
                     res.should.have.header('Content-Range', '0-1/15');
                 });
@@ -83,14 +83,14 @@ describe('Range', function() {
                 it('understands open-ended ranges', async function() {
                     const res = await chai.request(app).get('/items')
                         .set('Range', '0-')
-                        .set('Range-Units', 'items');
+                        .set('Range-Unit', 'items');
                     res.should.have.status(200);
                 });
 
                 it('returns an empty body when there are no results', async function() {
                     const res = await chai.request(app).get('/menagerie')
                         .set('Range', '0-1')
-                        .set('Range-Units', 'items');
+                        .set('Range-Unit', 'items');
                     res.should.have.status(200);
                     res.body.should.deep.equal([]);
                     res.should.have.header('Content-Range', '*/0');
@@ -99,7 +99,7 @@ describe('Range', function() {
                 it('allows one-item requests', async function() {
                     const res = await chai.request(app).get('/items')
                         .set('Range', '0-0')
-                        .set('Range-Units', 'items');
+                        .set('Range-Unit', 'items');
                     res.should.have.status(206);
                     res.should.have.header('Content-Range', '0-0/15');
                 });
@@ -107,7 +107,7 @@ describe('Range', function() {
                 it('handles ranges beyond collection length via truncation', async function() {
                     const res = await chai.request(app).get('/items')
                         .set('Range', '10-100')
-                        .set('Range-Units', 'items');
+                        .set('Range-Unit', 'items');
                     res.should.have.status(206);
                     res.should.have.header('Content-Range', '10-14/15');
                 });
@@ -118,7 +118,7 @@ describe('Range', function() {
                     const res = await appFetch('/items', {
                         headers: {
                             Range: '1-0',
-                            'Range-Units': 'items'
+                            'Range-Unit': 'items'
                         }
                     });
                     res.should.have.property('status', 416);
@@ -128,26 +128,26 @@ describe('Range', function() {
                     const res = await appFetch('/menagerie', {
                         headers: {
                             Range: '1-2',
-                            'Range-Units': 'items'
+                            'Range-Unit': 'items'
                         }
                     });
                     res.should.have.property('status', 416);
-                    res.should.have.header('Content-Range', '*/0');
+                    res.headers.getAll('Content-Range').should.deep.equal(['*/0']);
                     const body = await res.json();
-                    expect(body).to.be.null;
+                    body.should.deep.equal([]);
                 });
 
                 it('refuses a range requesting start past last item', async function() {
                     const res = await appFetch('/items', {
                         headers: {
                             Range: '100-199',
-                            'Range-Units': 'items'
+                            'Range-Unit': 'items'
                         }
                     });
                     res.should.have.property('status', 416);
-                    res.should.have.header('Content-Range', '*/15');
+                    res.headers.getAll('Content-Range').should.deep.equal(['*/15']);
                     const body = await res.json();
-                    expect(body).to.be.null;
+                    body.should.deep.equal([]);
                 });
             });
         });
