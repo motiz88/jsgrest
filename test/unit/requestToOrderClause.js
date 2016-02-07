@@ -16,9 +16,9 @@ describe('requestToOrderClause', function() {
             .should.equal('');
     });
 
-    it('?order=Col --> ORDER BY "Col" DESC', function() {
+    it('?order=Col --> ORDER BY "Col" ASC', function() {
         requestToOrderClause({query: {order: 'Col'}})
-            .should.equal('ORDER BY "Col" DESC');
+            .should.equal('ORDER BY "Col" ASC');
     });
 
     it('?order=Col.desc --> ORDER BY "Col" DESC', function() {
@@ -36,14 +36,14 @@ describe('requestToOrderClause', function() {
             .should.equal('ORDER BY "ColA" ASC, "ColB" DESC');
     });
 
-    it('?order=ColA,ColB.asc --> ORDER BY "ColA" DESC, "ColB" ASC', function() {
-        requestToOrderClause({query: {order: 'ColA,ColB.asc'}})
-            .should.equal('ORDER BY "ColA" DESC, "ColB" ASC');
+    it('?order=ColA,ColB.desc --> ORDER BY "ColA" ASC, "ColB" DESC', function() {
+        requestToOrderClause({query: {order: 'ColA,ColB.desc'}})
+            .should.equal('ORDER BY "ColA" ASC, "ColB" DESC');
     });
 
-    it('?order=Col.nullsfirst --> ORDER BY "Col" DESC NULLS FIRST', function() {
+    it('?order=Col.nullsfirst --> ORDER BY "Col" ASC NULLS FIRST', function() {
         requestToOrderClause({query: {order: 'Col.nullsfirst'}})
-            .should.equal('ORDER BY "Col" DESC NULLS FIRST');
+            .should.equal('ORDER BY "Col" ASC NULLS FIRST');
     });
 
     it('?order=Col.asc.nullsfirst --> ORDER BY "Col" ASC NULLS FIRST', function() {
