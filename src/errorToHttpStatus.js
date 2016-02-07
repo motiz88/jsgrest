@@ -56,6 +56,7 @@ export default function errorToHttpStatus(error) {
             return 500; // internal Error
 
         default:
-            return 400;
+            throw error;
+            //return 400;
     }
 }

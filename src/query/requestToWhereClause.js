@@ -3,9 +3,9 @@ import XRegExp from 'xregexp';
 
 const conditionRegex = XRegExp(`
     ^ # start of value
-    (?<not> not \.)?
+    (?<not> not \\.)?
     (?<operator>  n?eq|gte?|lte?|i?like|@@|isnot|is|in|<@|@>|notin )
-    \.
+    \\.
     (?<rhs> .*)
     $
 `, 'x');
@@ -13,6 +13,24 @@ const conditionRegex = XRegExp(`
 const rhsForIsOpRegex = XRegExp(`
     ^ TRUE | FALSE | NULL $
 `, 'xi');
+
+const operatorMap = {
+    eq: '=',
+    neq: '<>',
+    gt: '>',
+    lt: '<',
+    gte: '>=',
+    lte: '<=',
+    '<@': '<@',
+    '@>': '@>',
+    is: 'IS',
+    isnot: 'IS NOT',
+    in : 'IN',
+    notin: 'NOT IN',
+    '@@': '@@',
+    like: 'LIKE',
+    ilike: 'ILIKE'
+};
 
 function convertLikePattern(rhs) {
     return String(rhs || '').replace(/\*/g, '%');
@@ -26,62 +44,33 @@ export default function requestToWhereClause(req) {
             const match = XRegExp.exec(condition, conditionRegex);
             if (!match)
                 throw new Error(`Unrecognized query condition ${key}=${condition}`);
-            let sqlOp, sqlRhsQuoted = pgEscape.literal(match.rhs);
+            const sqlOp = operatorMap[match.operator || ''];
+            if (!sqlOp)
+                throw new Error('No such operator: ' + match.operator);
+            let sqlRhsQuoted;
             switch (match.operator) {
-                case 'eq':
-                    sqlOp = '=';
-                    break;
-                case 'neq':
-                    sqlOp = '<>';
-                    break;
-                case 'gt':
-                    sqlOp = '>';
-                    break;
-                case 'lt':
-                    sqlOp = '<';
-                    break;
-                case 'gte':
-                    sqlOp = '>=';
-                    break;
-                case 'lte':
-                    sqlOp = '<=';
-                    break;
-                case '<@':
-                    sqlOp = '<@';
-                    break;
-                case '@>':
-                    sqlOp = '@>';
-                    break;
-                case 'is':
-                    sqlOp = 'IS';
-                    if (rhsForIsOpRegex.exec(match.rhs))
-                        sqlRhsQuoted = match.rhs.toUpperCase();
-                    break;
+                case 'is': /* falls through */
                 case 'isnot':
-                    sqlOp = 'IS NOT';
                     if (rhsForIsOpRegex.exec(match.rhs))
                         sqlRhsQuoted = match.rhs.toUpperCase();
+                    else
+                        sqlRhsQuoted = pgEscape.literal(match.rhs);
                     break;
-                case 'in':
-                    sqlOp = 'IN';
-                    break;
+                case 'in': /* falls through */
                 case 'notin':
-                    sqlOp = 'NOT IN';
+                    sqlRhsQuoted = '(' + match.rhs.split(',').map(pgEscape.literal).join(',') + ')';
                     break;
                 case '@@':
-                    sqlOp = '@@';
-                    sqlRhsQuoted = `to_tsquery(${sqlRhsQuoted})`;
+                    sqlRhsQuoted = `to_tsquery(${pgEscape.literal(match.rhs)})`;
                     break;
-                case 'like':
-                    sqlOp = 'LIKE';
-                    sqlRhsQuoted = pgEscape.literal(convertLikePattern(match.rhs));
-                    break;
+                case 'like': /* falls through */
                 case 'ilike':
-                    sqlOp = 'ILIKE';
                     sqlRhsQuoted = pgEscape.literal(convertLikePattern(match.rhs));
                     break;
                 default:
-                    throw new Error('No such operator: ' + match.operator);
+                    sqlRhsQuoted = pgEscape.literal(match.rhs);
+                    break;
+
             }
             const keyQuoted = pgEscape.ident(key);
             const sqlExpr = `${keyQuoted} ${sqlOp} ${sqlRhsQuoted}`;

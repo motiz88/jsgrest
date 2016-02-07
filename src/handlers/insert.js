@@ -15,7 +15,7 @@ export default wrap(async function insertHandler(req, res) {
         .join(', ') + ')';
     // FIXME: pgEscape.literal is a bad choice here. Doesn't handle numbers and many other cases.
 
-    const returning = req.header('Prefer')==='return=representation' ? ' RETURNING *' : '';
+    const returning = req.flags.preferRepresentation !== 'headersOnly' ? ' RETURNING *' : '';
     const query = `INSERT INTO ${qualifiedRelationQuoted} ${fieldsQuoted} VALUES ${valuesQuoted}
         ${returning}`;
 

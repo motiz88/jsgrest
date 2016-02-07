@@ -7,7 +7,10 @@ import insertHandler from './handlers/insert';
 import updateHandler from './handlers/update';
 import deleteHandler from './handlers/delete';
 import errorHandler from './middleware/error';
+import sendResult from './middleware/sendResult';
 import bodyParser from 'body-parser';
+import rangeParser from './middleware/rangeParser';
+import flagParser from './middleware/flags';
 
 type AppInitArgs = {connectionString: string, schema: string};
 
@@ -25,6 +28,9 @@ export default function createApp({connectionString, schema}: AppInitArgs) {
         next();
     });
 
+    app.use(flagParser);
+    app.use(rangeParser);
+
     app.get('/', rootHandler);
 
     app.use('/rpc/', () => {
@@ -36,6 +42,7 @@ export default function createApp({connectionString, schema}: AppInitArgs) {
     app.patch('/:relation', parseJson, updateHandler);
     app.delete('/:relation', deleteHandler);
 
+    app.use(sendResult);
     app.use(errorHandler);
 
     return app;

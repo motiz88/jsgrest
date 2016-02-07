@@ -17,7 +17,7 @@ export default function requestToOrderClause(req) {
             if (!match)
                 throw new Error(`Unrecognized order spec ${spec}`);
             const columnQuoted = pgEscape.ident(match.column);
-            const direction = match.direction === '.asc' ? 'ASC' : 'DESC';
+            const direction = match.direction === '.desc' ? 'DESC' : 'ASC';
             const nulls = match.nulls === '.nullsfirst' ? 'NULLS FIRST' :
                 (match.nulls === '.nullslast' ? 'NULLS LAST' : '');
             const sqlExpr = `${columnQuoted} ${direction} ${nulls}`;

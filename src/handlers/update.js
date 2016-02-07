@@ -17,7 +17,7 @@ export default wrap(async function updateHandler(req, res) {
     // FIXME: pgEscape.literal is a bad choice here. Doesn't handle numbers and many other cases.
 
     const whereClause = requestToWhereClause(req);
-    const returning = req.header('Prefer')==='return=representation' ? ' RETURNING *' : '';
+    const returning = req.flags.preferRepresentation !== 'headersOnly' ? ' RETURNING *' : '';
     const query =
         `UPDATE ${qualifiedRelationQuoted} SET ${assignmentsQuoted} ${whereClause} ${returning}`;
 
