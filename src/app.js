@@ -6,7 +6,7 @@ import selectHandler from './handlers/select';
 import insertHandler from './handlers/insert';
 import updateHandler from './handlers/update';
 import deleteHandler from './handlers/delete';
-import errorHandler from './handlers/error';
+import errorHandler from './middleware/error';
 import bodyParser from 'body-parser';
 
 type AppInitArgs = {connectionString: string, schema: string};

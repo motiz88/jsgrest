@@ -5,5 +5,8 @@ export default function errorHandler(err, req, res, next) {
         return next(err);
     }
     const status = errorToHttpStatus(err);
-    res.status(status || 500);
+    if (!status || status === 500)
+        throw err;
+    res.status(status || 500)
+        .json(err);
 }
