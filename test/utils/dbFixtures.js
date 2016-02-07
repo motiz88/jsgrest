@@ -1,3 +1,4 @@
+import pg from '@motiz88/pg';
 import testConfig from '../config.json';
 import {exec} from 'mz/child_process';
 import shellEscape from 'shell-escape-tag';
