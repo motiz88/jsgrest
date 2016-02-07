@@ -5,3 +5,4 @@
 --reporter spec
 --invert
 --fgrep TODO:
+--timeout 10000
