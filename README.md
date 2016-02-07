@@ -1,5 +1,7 @@
-# jsgrest [![Build Status](https://travis-ci.org/motiz88/jsgrest.svg?branch=master)]
+# jsgrest
+[![Build Status](https://travis-ci.org/motiz88/jsgrest.svg?branch=master)]
 (https://travis-ci.org/motiz88/jsgrest)
+
 Postgres REST API server in JavaScript (a la PostgREST).
 
 This is a bare-bones reimplementation of [@begriffs](https://github.com/begriffs)'s fantastic
