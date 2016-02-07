@@ -1,9 +1,9 @@
 import formatContentRange from '../formatContentRange';
 
-function rangeStatus({first, last, length}) {
-    if (first > length)
+function rangeStatus({first, last, length}, singular) {
+    if (length !== null && first > length)
         return 416;
-    else if (1 + last - first < length)
+    else if (!singular && length !== null && 1 + last - first < length)
         return 206;
     return 200;
 }
@@ -21,7 +21,7 @@ export default function sendResult(req, res, next) {
         const range = {
             first,
             last: first + parseInt(queryTotal) - 1,
-            length: parseInt(tableTotal)
+            length: req.flags.preferCount ? parseInt(tableTotal) : null
         };
 
         const rangeFormatted = formatContentRange(range);
@@ -29,7 +29,7 @@ export default function sendResult(req, res, next) {
 
         res.set('Content-Range', rangeFormatted);
         res.set('Range-Unit', 'items');
-        res.status(rangeStatus(range));
+        res.status(rangeStatus(range, req.flags.preferSingular));
 
         if (req.flags.preferSingular && queryTotal <= 0)
             res.sendStatus(404);
