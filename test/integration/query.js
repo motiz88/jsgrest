@@ -1,6 +1,9 @@
 import chai from 'chai';
+import fetch from 'node-fetch';
 import createApp from '../../src/app';
 import dbFixtures from '../utils/dbFixtures';
+import serverAddress from '../utils/serverAddress';
+import http from 'http';
 
 before(async function() {
     this.timeout(60000);
@@ -12,12 +15,17 @@ after(async function() {
 });
 
 describe('Query', function() {
-    let app;
+    let app, appServer, appFetch = (path, ...args) => fetch(serverAddress(appServer, path), ...args);
     before(function() {
         app = createApp({
             connectionString: dbFixtures.connectionString,
             schema: 'test'
         });
+        appServer = http.createServer(app);
+    });
+
+    after(function(done) {
+        appServer.close(done);
     });
 
     describe('Querying a table with a column called count', function() {
@@ -29,8 +37,8 @@ describe('Query', function() {
 
     describe('Querying a nonexistent table', function() {
         it('causes a 404', async function() {
-            const res = await chai.request(app).get('/faketable');
-            res.should.have.status(404);
+            const res = await appFetch('/faketable');
+            res.should.have.property('status', 404);
         });
     });
 
@@ -242,18 +250,19 @@ describe('Query', function() {
         });
 
         it('fails on bad casting (data of the wrong format)', async function() {
-            const res = await chai.request(app)
-                .get('/complex_items?select=settings->foo->>bar::integer');
-            res.body.should.deep.equal({hint: null, details: null, code: '22P02',
+            const res = await appFetch('/complex_items?select=settings->foo->>bar::integer');
+            res.should.have.property('status', 400);
+            const body = await res.json();
+            body.should.deep.equal({hint: null, details: null, code: '22P02',
                 message: 'invalid input syntax for integer: "baz"'});
-            res.should.have.status(400);
         });
 
         it('fails on bad casting (wrong cast type)', async function() {
-            const res = await chai.request(app).get('/complex_items?select=id::fakecolumntype');
-            res.body.should.deep.equal({hint: null, details: null, code: '42704',
+            const res = await appFetch('/complex_items?select=id::fakecolumntype');
+            res.should.have.property('status', 400);
+            const body = await res.json();
+            body.should.deep.equal({hint: null, details: null, code: '42704',
                 message: 'type "fakecolumntype" does not exist'});
-            res.should.have.status(400);
         });
 
         it('json subfield two levels (string)', async function() {
@@ -382,9 +391,12 @@ describe('Query', function() {
         });
 
         it('will respond with 404 when not found', async function() {
-            const res = await chai.request(app).get('/items?id=eq.9999')
-                .set('Prefer', 'plurality=singular');
-            res.should.have.status(404);
+            const res = await appFetch('/items?id=eq.9999', {
+                headers: {
+                    Prefer: 'plurality=singular'
+                }
+            });
+            res.should.have.property('status', 404);
         });
 
         it('TODO: can shape plurality singular object routes', async function() {

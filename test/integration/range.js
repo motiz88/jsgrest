@@ -1,6 +1,9 @@
 import chai, {expect} from 'chai';
 import createApp from '../../src/app';
 import dbFixtures from '../utils/dbFixtures';
+import serverAddress from '../utils/serverAddress';
+import http from 'http';
+import fetch from 'node-fetch';
 
 before(async function() {
     this.timeout(60000);
@@ -12,12 +15,17 @@ after(async function() {
 });
 
 describe('Range', function() {
-    let app;
+    let app, appServer, appFetch = (path, ...args) => fetch(serverAddress(appServer, path), ...args);
     before(function() {
         app = createApp({
             connectionString: dbFixtures.connectionString,
             schema: 'test'
         });
+        appServer = http.createServer(app);
+    });
+
+    after(function(done) {
+        appServer.close(done);
     });
 
     describe('GET /items', function() {
@@ -106,28 +114,39 @@ describe('Range', function() {
 
             describe("of invalid range", function() {
                 it('fails with 416 for offside range', async function() {
-                    const res = await chai.request(app).get('/items')
-                        .set('Range', '1-0')
-                        .set('Range-Units', 'items');
-                    res.should.have.status(416);
+                    const res = await appFetch('/items', {
+                        headers: {
+                            Range: '1-0',
+                            'Range-Units': 'items'
+                        }
+                    });
+                    res.should.have.property('status', 416);
                 });
 
                 it('refuses a range with nonzero start when there are no items', async function() {
-                    const res = await chai.request(app).get('/menagerie')
-                        .set('Range', '1-2')
-                        .set('Range-Units', 'items');
-                    res.should.have.status(416);
-                    expect(res.body).to.be.null;
+                    const res = await appFetch('/menagerie', {
+                        headers: {
+                            Range: '1-2',
+                            'Range-Units': 'items'
+                        }
+                    });
+                    res.should.have.property('status', 416);
                     res.should.have.header('Content-Range', '*/0');
+                    const body = await res.json();
+                    expect(body).to.be.null;
                 });
 
                 it('refuses a range requesting start past last item', async function() {
-                    const res = await chai.request(app).get('/items')
-                        .set('Range', '100-199')
-                        .set('Range-Units', 'items');
-                    res.should.have.status(416);
-                    expect(res.body).to.be.null;
+                    const res = await appFetch('/items', {
+                        headers: {
+                            Range: '100-199',
+                            'Range-Units': 'items'
+                        }
+                    });
+                    res.should.have.property('status', 416);
                     res.should.have.header('Content-Range', '*/15');
+                    const body = await res.json();
+                    expect(body).to.be.null;
                 });
             });
         });
