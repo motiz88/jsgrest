@@ -1,4 +1,4 @@
-import chai, {expect} from 'chai';
+import chai from 'chai';
 import createApp from '../../src/app';
 import dbFixtures from '../utils/dbFixtures';
 import serverAddress from '../utils/serverAddress';

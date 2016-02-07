@@ -5,11 +5,15 @@ import shellEscape from 'shell-escape-tag';
 
 function logAndExec(command) {
     console.log(command);
-    return exec(command);
+    if (!exec)
+        return exec(command);
+    else
+        return [];
 }
 
 async function execSqlFile(file, connectionString) {
-    const [stdout, stderr] = await logAndExec(shellEscape `${testConfig.database.psql} --file=${file}`
+    const [stdout, stderr] = await logAndExec(shellEscape
+        `${testConfig.database.psql} --file=${file}`
         + ' --quiet --set client_min_messages=warning'
         + shellEscape ` ${connectionString || testConfig.database.connectionStringWithDatabase}`);
     if (stdout)
@@ -27,20 +31,23 @@ class TestDb {
 
     async setup() {
         await new Promise(
-            (resolve, reject) => pg.connect(testConfig.database.connectionString, (err, client, done) => {
-                if (err) {
+            (resolve, reject) => pg.connect(testConfig.database.connectionString,
+                (err, client, done) => {
+                    if (err) {
+                        done();
+                        return reject(err);
+                    }
                     done();
-                    return reject(err);
-                }
-                done();
 
-                resolve();
-            }));
+                    resolve();
+                }));
 
         if (this.firstSetup) {
             this.firstSetup = false;
 
-            const psqlBanner = await logAndExec(shellEscape `${testConfig.database.psql} --version`);
+            const psqlBanner = await logAndExec(shellEscape
+                `${testConfig.database.psql} --version`
+            );
 
             if (psqlBanner[0])
                 console.log(psqlBanner[0]);
@@ -48,7 +55,7 @@ class TestDb {
                 console.error(psqlBanner[1]);
             await execSqlFile(require.resolve('../fixtures/database.sql'),
                 testConfig.database.connectionString);
-            for (const script of ['roles.sql', 'schema.sql', 'privileges.sql'])
+            for (const script of['roles.sql', 'schema.sql', 'privileges.sql'])
                 await execSqlFile(require.resolve(`../fixtures/${script}`));
         }
 
