@@ -51,6 +51,7 @@
     "longjohn": "^0.2.11",
     "mocha": "^2.4.5",
     "mz": "^2.3.0",
+    "node-fetch": "^1.3.3",
     "shell-escape-tag": "^1.0.0",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
