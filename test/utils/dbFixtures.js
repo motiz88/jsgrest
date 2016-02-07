@@ -5,10 +5,7 @@ import shellEscape from 'shell-escape-tag';
 
 function logAndExec(command) {
     console.log(command);
-    if (!exec)
-        return exec(command);
-    else
-        return [];
+    return exec(command);
 }
 
 async function execSqlFile(file, connectionString) {
