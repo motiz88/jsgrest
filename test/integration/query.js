@@ -218,6 +218,11 @@ describe('Query', function() {
             const res = await chai.request(app).get('/complex_items?select=id&arr_data=<@.{1,2,4}');
             res.body.should.deep.equal([{id: 1}, {id: 2}]);
         });
+
+        it('fails on unrecognized condition format', async function() {
+            const res = await appFetch('/items?noop=ack.pth');
+            res.should.have.property('status', 400);
+        });
     });
 
 
