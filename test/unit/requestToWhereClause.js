@@ -83,22 +83,22 @@ describe('requestToWhereClause', function() {
     });
 
     describe('operator <@', function() {
-        it('should be recognized with array literal', function() {
+        it('TODO: should be recognized with array literal', function() {
             requestToWhereClause({query: {col: '<@.{0}'}})
                 .should.equal('WHERE col <@ {\'0\'}');
         });
-        it('should be recognized with array literal in the negative', function() {
+        it('TODO: should be recognized with array literal in the negative', function() {
             requestToWhereClause({query: {col: 'not.<@.{0}'}})
                 .should.equal('WHERE NOT (col <@ {\'0\'})');
         });
     });
 
     describe('operator @>', function() {
-        it('should be recognized with array literal', function() {
+        it('TODO: should be recognized with array literal', function() {
             requestToWhereClause({query: {col: '@>.{0}'}})
                 .should.equal('WHERE col @> {\'0\'}');
         });
-        it('should be recognized with array literal in the negative', function() {
+        it('TODO: should be recognized with array literal in the negative', function() {
             requestToWhereClause({query: {col: 'not.@>.{0}'}})
                 .should.equal('WHERE NOT (col @> {\'0\'})');
         });
