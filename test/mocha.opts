@@ -4,5 +4,5 @@
 --require source-map-support/register
 --reporter spec
 --invert
---fgrep TODO:
+--grep (TODO|DEPRECATED):
 --timeout 10000
