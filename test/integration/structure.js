@@ -2,16 +2,16 @@ import chai from 'chai';
 import createApp from '../../src/app';
 import dbFixtures from '../utils/dbFixtures';
 
-before(async function() {
-    this.timeout(60000);
-    await dbFixtures.setup();
-});
-
-after(async function() {
-    await dbFixtures.teardown();
-});
-
 describe('GET --> SELECT', function() {
+    before(async function() {
+        this.timeout(60000);
+        await dbFixtures.setup();
+    });
+
+    after(async function() {
+        await dbFixtures.teardown();
+    });
+
     let app;
     before(function() {
         app = createApp({

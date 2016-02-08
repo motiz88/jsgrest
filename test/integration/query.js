@@ -5,16 +5,16 @@ import dbFixtures from '../utils/dbFixtures';
 import serverAddress from '../utils/serverAddress';
 import http from 'http';
 
-before(async function() {
-    this.timeout(60000);
-    await dbFixtures.setup();
-});
-
-after(async function() {
-    await dbFixtures.teardown();
-});
-
 describe('Query', function() {
+    before(async function() {
+        this.timeout(60000);
+        await dbFixtures.setup();
+    });
+
+    after(async function() {
+        await dbFixtures.teardown();
+    });
+
     let app, appServer,
         appFetch = (path, ...args) => fetch(serverAddress(appServer, path), ...args);
     before(function() {
