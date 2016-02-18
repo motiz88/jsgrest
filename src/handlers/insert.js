@@ -9,6 +9,6 @@ export default wrap(async function insertHandler(req, res, next) {
     catch(e) {
         return res.status(400).send(e.stack || e.message || e.code || e);
     }
-    res.insertDbResult = await res.execQuery(statement);
+    res.dbInsertResult = await res.execQuery(statement);
     next();
 });

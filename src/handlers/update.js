@@ -9,6 +9,6 @@ export default wrap(async function updateHandler(req, res, next) {
     catch(e) {
         return res.status(400).send(e.stack || e.message || e.code || e);
     }
-    res.updateDbResult = await res.execQuery(statement);
+    res.dbUpdateResult = await res.execQuery(statement);
     next();
 });
