@@ -1,6 +1,8 @@
 export default function errorToHttpStatus(error) {
     const code = (error ? error.code : '') || '';
     switch (code) {
+        case '23502':
+            return 400;
         case '23503':
             return 409; // foreign_key_violation
         case '23505':
@@ -56,7 +58,6 @@ export default function errorToHttpStatus(error) {
             return 500; // internal Error
 
         default:
-            throw error;
-            //return 400;
+            return 400;
     }
 }

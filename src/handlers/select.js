@@ -9,6 +9,6 @@ export default wrap(async function selectHandler(req, res, next) {
     catch(e) {
         return res.sendStatus(400);
     }
-    await res.status(200).sendSelectQuery(...statement);
+    await res.status(200).sendSelectQuery(statement);
     next();
 });

@@ -1,5 +1,8 @@
 import pgEscape from 'pg-escape';
 import XRegExp from 'xregexp';
+import sql, {join as joinSql, raw as rawSql} from '../sqlTemplate';
+import fieldPathToSql from '../fieldPathToSql';
+import arrayLiteralToSql from '../arrayLiteralToSql';
 
 const conditionRegex = XRegExp(`
     ^ # start of value
@@ -32,7 +35,7 @@ const operatorMap = {
     ilike: 'ILIKE'
 };
 
-function convertLikePattern(rhs) {
+function likePatternToSql(rhs) {
     return String(rhs || '').replace(/\*/g, '%');
 }
 
@@ -44,41 +47,48 @@ export default function requestToWhereClause(req) {
             const match = XRegExp.exec(condition, conditionRegex);
             if (!match)
                 throw new Error(`Unrecognized query condition ${key}=${condition}`);
-            const sqlOp = operatorMap[match.operator || ''];
+            let sqlOp = operatorMap[match.operator || ''];
             if (!sqlOp)
                 throw new Error('No such operator: ' + match.operator);
-            let sqlRhsQuoted;
+            sqlOp = rawSql(sqlOp);
+            let sqlRhs;
             switch (match.operator) {
                 case 'is': /* falls through */
                 case 'isnot':
                     if (rhsForIsOpRegex.exec(match.rhs))
-                        sqlRhsQuoted = match.rhs.toUpperCase();
+                        sqlRhs = rawSql(match.rhs.toUpperCase());
                     else
-                        sqlRhsQuoted = pgEscape.literal(match.rhs);
+                        sqlRhs = sql `${match.rhs}`;
                     break;
                 case 'in': /* falls through */
                 case 'notin':
-                    sqlRhsQuoted = '(' + match.rhs.split(',').map(pgEscape.literal).join(',') + ')';
+                    sqlRhs = sql `(${joinSql(match.rhs.split(','))})`;
                     break;
                 case '@@':
-                    sqlRhsQuoted = `to_tsquery(${pgEscape.literal(match.rhs)})`;
+                    sqlRhs = sql `to_tsquery(${match.rhs})`;
                     break;
                 case 'like': /* falls through */
                 case 'ilike':
-                    sqlRhsQuoted = pgEscape.literal(convertLikePattern(match.rhs));
+                    sqlRhs = sql `${likePatternToSql(match.rhs)}`;
+                    break;
+                case '@>': /* falls through */
+                case '<@':
+                    sqlRhs = sql `${arrayLiteralToSql(match.rhs)}`;
                     break;
                 default:
-                    sqlRhsQuoted = pgEscape.literal(match.rhs);
+                    sqlRhs = sql `${match.rhs}`;
                     break;
 
             }
-            const keyQuoted = pgEscape.ident(key);
-            const sqlExpr = `${keyQuoted} ${sqlOp} ${sqlRhsQuoted}`;
+            const keyQuoted = rawSql(fieldPathToSql(key));
+            const sqlExpr = sql `${keyQuoted} ${sqlOp} ${sqlRhs}`;
             if (match.not)
-                return `NOT (${sqlExpr})`;
+                return sql`NOT (${sqlExpr})`;
             return sqlExpr;
         })
-        .filter(Boolean)
-        .join(' AND ');
-    return whereConditions ? ('WHERE ' + whereConditions) : '';
+        .filter(Boolean);
+    if (!whereConditions.length)
+        return sql``;
+    else
+        return sql`WHERE ${joinSql(whereConditions, ' AND ')}`;
 }

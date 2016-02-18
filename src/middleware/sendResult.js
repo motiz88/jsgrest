@@ -1,6 +1,6 @@
 import formatContentRange from '../formatContentRange';
 
-function rangeStatus({first, last, length}, singular) {
+function rangeReadStatus({first, last, length}, singular) {
     if (length !== null && first > length)
         return 416;
     else if (!singular && length !== null && 1 + last - first < length)
@@ -8,9 +8,16 @@ function rangeStatus({first, last, length}, singular) {
     return 200;
 }
 
+function rangeDeleteStatus({length}) {
+    if (!length)
+        return 404;
+    return 204;
+}
+
 export default function sendResult(req, res, next) {
     if (res.dbReadResult && res.dbReadResult.rows && res.dbReadResult.rows.length) {
-        const row = res.dbReadResult.rows[0];
+        const result = res.dbReadResult;
+        const row = result.rows[0];
 
         const body = row.body || '',
             tableTotal = row.total_result_set,
@@ -29,11 +36,38 @@ export default function sendResult(req, res, next) {
 
         res.set('Content-Range', rangeFormatted);
         res.set('Range-Unit', 'items');
-        res.status(rangeStatus(range, req.flags.preferSingular));
+        res.status(rangeReadStatus(range, req.flags.preferSingular));
 
         if (req.flags.preferSingular && queryTotal <= 0)
             res.sendStatus(404);
         else {
+            res.set('Content-Type', 'application/json');
+            res.send(body);
+        }
+    } else if (res.dbDeleteResult) {
+        const result = res.dbDeleteResult;
+        const range = {
+            first: 1,
+            last: 0,
+            length: result.rowCount
+        };
+
+        const rangeFormatted = formatContentRange(range);
+        res.set('Content-Range', rangeFormatted);
+        res.set('Range-Unit', 'items');
+        res.status(rangeDeleteStatus(range));
+
+        console.log(result);
+        res.send();
+    } else if (res.dbInsertResult) {
+        const result = res.dbInsertResult;
+
+        res.status(201);
+        if (req.flags.preferRepresentation === 'headersOnly')
+            res.send();
+        else {
+            const row = result.rows[0];
+            const body = row.body;
             res.set('Content-Type', 'application/json');
             res.send(body);
         }

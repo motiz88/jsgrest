@@ -209,12 +209,12 @@ describe('Query', function() {
             }]);
         });
 
-        it('TODO: matches with @> operator', async function() {
+        it('matches with @> operator', async function() {
             const res = await chai.request(app).get('/complex_items?select=id&arr_data=@>.{2}');
             res.body.should.deep.equal([{id: 2}, {id: 3}]);
         });
 
-        it('TODO: matches with <@ operator', async function() {
+        it('matches with <@ operator', async function() {
             const res = await chai.request(app).get('/complex_items?select=id&arr_data=<@.{1,2,4}');
             res.body.should.deep.equal([{id: 1}, {id: 2}]);
         });
@@ -226,7 +226,7 @@ describe('Query', function() {
     });
 
 
-    describe('TODO: Shaping response with select parameter', function() {
+    describe('Shaping response with select parameter', function() {
         it('selectStar works in absense of parameter', async function() {
             const res = await chai.request(app).get('/complex_items?id=eq.3');
             res.body.should.deep.equal([{id: 3, name: 'Three',
@@ -285,7 +285,7 @@ describe('Query', function() {
             // the value in the db is an int, but here we expect a string for now
         });
 
-        it('requesting parents and children', async function() {
+        it('TODO: requesting parents and children', async function() {
             const res = await chai.request(app)
                 .get('/projects?id=eq.1&select=id, name, clients{*}, tasks{id, name}');
             res.body.should.deep.equal([{id: 1, name: "Windows 7",
@@ -293,30 +293,30 @@ describe('Query', function() {
                 tasks: [{id: 1, name: "Design w7"}, {id: 2, name: "Code w7"}]}]);
         });
 
-        it('requesting parents and filtering parent columns', async function() {
+        it('TODO: requesting parents and filtering parent columns', async function() {
             const res = await chai.request(app)
                 .get('/projects?id=eq.1&select=id, name, clients{id}');
             res.body.should.deep.equal([{id: 1, name: "Windows 7", clients: {id: 1}}]);
         });
 
-        it('rows with missing parents are included', async function() {
+        it('TODO: rows with missing parents are included', async function() {
             const res = await chai.request(app).get('/projects?id=in.1,5&select=id,clients{id}');
             res.body.should.deep.equal([{id: 1, clients: {id: 1}}, {id: 5, clients: null}]);
         });
 
-        it('rows with no children return [] instead of null', async function() {
+        it('TODO: rows with no children return [] instead of null', async function() {
             const res = await chai.request(app).get('/projects?id=in.5&select=id,tasks{id}');
             res.body.should.deep.equal([{id: 5, tasks: []}]);
         });
 
-        it('requesting children 2 levels', async function() {
+        it('TODO: requesting children 2 levels', async function() {
             const res = await chai.request(app)
                 .get('/clients?id=eq.1&select=id,projects{id,tasks{id}}');
             res.body.should.deep.equal([{id: 1, projects: [{id: 1, tasks: [{id: 1}, {id: 2}]},
                 {id: 2, tasks: [{id: 3}, {id: 4}]}]}]);
         });
 
-        it('requesting many<->many relation', async function() {
+        it('TODO: requesting many<->many relation', async function() {
             const res = await chai.request(app).get('/tasks?select=id,users{id}');
             res.body.should.deep.equal([{id: 1, users: [{id: 1}, {id: 3}]},
                 {id: 2, users: [{id: 1}]}, {id: 3, users: [{id: 1}]}, {id: 4, users: [{id: 1}]},
@@ -325,13 +325,13 @@ describe('Query', function() {
         });
 
 
-        it('requesting many<->many relation reverse', async function() {
+        it('TODO: requesting many<->many relation reverse', async function() {
             const res = await chai.request(app).get('/users?select=id,tasks{id}');
             res.body.should.deep.equal([{id: 1, tasks: [{id: 1}, {id: 2}, {id: 3}, {id: 4}]},
                 {id: 2, tasks: [{id: 5}, {id: 6}, {id: 7}]}, {id: 3, tasks: [{id: 1}, {id: 5}]}]);
         });
 
-        it('requesting parents and children on views', async function() {
+        it('TODO: requesting parents and children on views', async function() {
             const res = await chai.request(app)
                 .get('/projects_view?id=eq.1&select=id, name, clients{*}, tasks{id, name}');
             res.body.should.deep.equal([{id: 1, name: "Windows 7",
@@ -339,14 +339,14 @@ describe('Query', function() {
                 tasks: [{id: 1, name: "Design w7"}, {id: 2, name: "Code w7"}]}]);
         });
 
-        it('requesting children with composite key', async function() {
+        it('TODO: requesting children with composite key', async function() {
             const res = await chai.request(app)
                 .get('/users_tasks?user_id=eq.2&task_id=eq.6&select=*, comments{content}');
             res.body.should.deep.equal([{user_id: 2, task_id: 6,
                 comments: [{content: "Needs to be delivered ASAP"}]}]);
         });
 
-        it('detect relations in views from exposed schema '
+        it('TODO: detect relations in views from exposed schema '
             + 'that are based on tables in private schema '
             + 'and have columns renames', async function() {
             const res = await chai.request(app)
@@ -360,7 +360,7 @@ describe('Query', function() {
             }]);
         });
 
-        it('can select by column name', async function() {
+        it('TODO: can select by column name', async function() {
             const res = await chai.request(app)
                 .get('/projects?id=in.1,3&select=id,name,client_id,client_id{id,name}');
             res.body.should.deep.equal(`[{id: 1, name: 'Windows 7', client_id: 1,
@@ -369,7 +369,7 @@ describe('Query', function() {
             //FIXME: duplicate key client_id, determine what this case should really be
         });
 
-        it('can select by column name sans id', async function() {
+        it('TODO: can select by column name sans id', async function() {
             const res = await chai.request(app)
                 .get('/projects?id=in.1,3&select=id,name,client_id,client{id,name}');
             res.body.should.deep.equal(`[{id: 1, name: 'Windows 7', client_id: 1,

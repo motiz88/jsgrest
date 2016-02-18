@@ -21,7 +21,7 @@ export default function parse(argv: Array<string>): ?ParsedArguments
     });
     parser.addArgument(['connection-string'], {
         help: 'Postgres connection string',
-        type: coerce('URL')
+        type: coerce('URL'),
     });
     parser.addArgument(['-p', '--port'], {
         help: 'Port to listen on (default: 80)',
@@ -32,6 +32,11 @@ export default function parse(argv: Array<string>): ?ParsedArguments
         help: 'Database schema (default: public)',
         type: 'string',
         defaultValue: 'public',
+    });
+    parser.addArgument(['-P', '--pure'], {
+        help: 'Enable pure mode, disabling features that require'
+        + ' persistent schema knowledge (default: false)',
+        action: 'storeTrue',
     });
 
     let args = {};
@@ -44,7 +49,7 @@ export default function parse(argv: Array<string>): ?ParsedArguments
         else
             throw e;
     }
-    const {port, 'connection-string': connectionString, schema, ...otherArgs} = args;
+    const {port, 'connection-string': connectionString, schema, pure, ...otherArgs} = args;
 
-    return {port, connectionString, schema, otherArgs};
+    return {port, connectionString, schema, pure, otherArgs};
 }

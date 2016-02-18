@@ -6,7 +6,7 @@ export default function errorHandler(err, req, res, next) {
     }
     const status = errorToHttpStatus(err);
     if (!status || status === 500)
-        throw err;
+        return next(err);
     res.status(status || 500)
         .json(err);
 }

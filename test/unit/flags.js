@@ -8,6 +8,10 @@ async function getFlagsFromHeaders(headers) {
     const req = new Request({
         headers: headers || {}
     });
+    return getFlagsFromRequest(req);
+}
+
+async function getFlagsFromRequest(req) {
     const res = new Response();
     const next = sinon.spy();
     flags(req, res, next);
@@ -73,4 +77,14 @@ describe('flags', function() {
         });
     });
 
+
+    it('POST + singular body = singular', async function() {
+        (await getFlagsFromRequest(new Request({method: 'POST', body: {}})))
+        .should.have.property('preferSingular', true);
+    });
+
+    it('POST + plural body = plural', async function() {
+        (await getFlagsFromRequest(new Request({method: 'POST', body: [{}]})))
+        .should.have.property('preferSingular', false);
+    });
 });

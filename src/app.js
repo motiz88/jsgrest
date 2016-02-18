@@ -12,16 +12,16 @@ import bodyParser from 'body-parser';
 import rangeParser from './middleware/rangeParser';
 import flagParser from './middleware/flags';
 
-type AppInitArgs = {connectionString: string, schema: string};
+type AppInitArgs = {connectionString: string, schema: string, pure: boolean};
 
-export default function createApp({connectionString, schema}: AppInitArgs) {
+export default function createApp({connectionString, schema, pure}: AppInitArgs) {
     const app = express();
 
-    const parseJson = bodyParser.json();
+    const parseJson = bodyParser.json({limit: Infinity});
 
 
     app.use((req, res, next) => {
-        req.dbConfig = {schema};
+        req.dbConfig = {schema, pure};
         res.dbConfig = {connectionString, schema};
         res.execQuery = execQuery;
         res.sendSelectQuery = sendSelectQuery;

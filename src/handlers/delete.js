@@ -1,11 +1,11 @@
 import wrap from '../wrap';
 import requestToQualifiedRelationQuoted from '../query/requestToQualifiedRelationQuoted';
 import requestToWhereClause from '../query/requestToWhereClause';
+import sql, {raw as rawSql} from '../sqlTemplate';
 
-export default wrap(async function deleteHandler(req, res) {
-    const qualifiedRelationQuoted = requestToQualifiedRelationQuoted(req);
+export default wrap(async function deleteHandler(req, res, next) {
+    const qualifiedRelationQuoted = rawSql(requestToQualifiedRelationQuoted(req));
     const whereClause = requestToWhereClause(req);
-    await res.execQuery(`DELETE FROM ${qualifiedRelationQuoted} ${whereClause}`);
-    res.sendStatus(204);
-    // FIXME: return number of affected rows or 404 if none
+    res.dbDeleteResult = await res.execQuery(sql `DELETE FROM ${qualifiedRelationQuoted} ${whereClause}`);
+    next();
 });

@@ -5,16 +5,16 @@ import serverAddress from '../utils/serverAddress';
 import http from 'http';
 import fetch from 'node-fetch';
 
-before(async function() {
-    this.timeout(60000);
-    await dbFixtures.setup();
-});
-
-after(async function() {
-    await dbFixtures.teardown();
-});
-
 describe('Deleting', function() {
+    before(async function() {
+        this.timeout(60000);
+        await dbFixtures.setup();
+    });
+
+    after(async function() {
+        await dbFixtures.teardown();
+    });
+
     let app, appServer,
         appFetch = (path, ...args) => fetch(serverAddress(appServer, path), ...args);
     before(function() {
@@ -32,9 +32,9 @@ describe('Deleting', function() {
     describe('existing record', function() {
         it('succeeds with 204 and deletion count', async function() {
             const res = await chai.request(app).delete('/items?id=eq.1')
-            expect(res.body).to.not.exist;
             res.should.have.status(204);
             res.should.have.header('Content-Range', '*/1');
+            expect(res.text).to.be.empty;
         });
 
         it('actually clears items ouf the db', async function() {

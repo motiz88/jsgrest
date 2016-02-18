@@ -2,25 +2,24 @@ import wrap from '../wrap';
 import requestToQualifiedRelationQuoted from '../query/requestToQualifiedRelationQuoted';
 import requestToWhereClause from '../query/requestToWhereClause';
 import pgEscape from 'pg-escape';
+import sql, {join as joinSql, raw as rawSql} from '../sqlTemplate';
 
 export default wrap(async function updateHandler(req, res) {
-    const qualifiedRelationQuoted = requestToQualifiedRelationQuoted(req);
+    const qualifiedRelationQuoted = rawSql(requestToQualifiedRelationQuoted(req));
     if (!req.body)
         return res.sendStatus(400);
 
     const assignmentsQuoted = Object.keys(req.body)
-        .map(key => pgEscape.ident(key) + ' = ' + pgEscape.literal(req.body[key]))
-        .join(', ');
-    if (!assignmentsQuoted)
+        .map(key => sql `${rawSql(pgEscape.ident(key))} = ${req.body[key]}`);
+    if (!assignmentsQuoted.length)
         return res.sendStatus(400);
 
-    // FIXME: pgEscape.literal is a bad choice here. Doesn't handle numbers and many other cases.
-
     const whereClause = requestToWhereClause(req);
-    const returning = req.flags.preferRepresentation !== 'headersOnly' ? ' RETURNING *' : '';
+    const returning = rawSql(req.flags.preferRepresentation !== 'headersOnly' ? ' RETURNING *' : '');
     const query =
-        `UPDATE ${qualifiedRelationQuoted} SET ${assignmentsQuoted} ${whereClause} ${returning}`;
+        sql`UPDATE ${qualifiedRelationQuoted} SET ${joinSql(assignmentsQuoted)} ${whereClause} ${returning}`;
 
     const dbResult = await res.execQuery(query);
-    res.status(201).json(dbResult.rows);
+    const status = req.flags.preferRepresentation !== 'headersOnly' ? 200 : 204;
+    res.status(status).json(dbResult.rows);
 });
