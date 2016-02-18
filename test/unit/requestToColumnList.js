@@ -38,7 +38,17 @@ describe('requestToColumnList', function() {
 
     it('with casting', function() {
         requestToColumnList({query: {select: 'Col::text'}})
-            .should.equal('"Col"::text');
+            .should.equal('("Col")::text');
+    });
+
+    it('with json path', function() {
+        requestToColumnList({query: {select: 'a->>B'}})
+            .should.equal(`a->>'B'`);
+    });
+
+    it('with json path and casting', function() {
+        requestToColumnList({query: {select: 'a->>B::integer'}})
+            .should.equal(`(a->>'B')::integer`);
     });
 
     it('escapes anything suspicious', function() {
