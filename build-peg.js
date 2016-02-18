@@ -16,7 +16,7 @@ Promise.all(
                             return PEG.buildParser(pegCode, {output: 'source'});
                         })
                         .then(function(parserCode) {
-                            return fs.writeFile(infile + '.js', parserCode)
+                            return fs.writeFile(infile + '.js', 'module.exports = ' +parserCode)
                                 .then(function() {
                                     console.log(infile + '.js');
                                 });
