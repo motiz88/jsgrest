@@ -71,6 +71,12 @@ export default function sendResult(req, res, next) {
             res.set('Content-Type', 'application/json');
             res.send(body);
         }
-    } else
+    } else if (res.dbUpdateResult) {
+        const result = res.dbUpdateResult;
+        const status = req.flags.preferRepresentation !== 'headersOnly' ? 200 : 204;
+        res.status(status);
+        res.json(result.rows);
+    }
+    else
         next();
 }

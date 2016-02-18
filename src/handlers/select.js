@@ -7,7 +7,7 @@ export default wrap(async function selectHandler(req, res, next) {
         statement = requestToReadStatement(req);
     }
     catch(e) {
-        return res.sendStatus(400);
+        return res.status(400).send(e.stack || e.message || e.code || e);
     }
     await res.status(200).sendSelectQuery(statement);
     next();
