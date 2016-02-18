@@ -1,13 +1,5 @@
 import ModuleEntryPoint from '../src';
-import chai, {expect} from 'chai';
-before(function() {
-    chai.use(require('chai-http'));
-    chai.use(require('sinon-chai'));
-    chai.use(require('chai-things'));
-    chai.use(require('chai-subset'));
-    chai.use(require('chai-as-promised'));
-    chai.should();
-});
+import {expect} from 'chai';
 
 describe('module entry point', function() {
     it('should be defined', function() {

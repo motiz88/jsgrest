@@ -1,4 +1,5 @@
 --compilers js:./test/utils/babel-register
+--require ./test/utils/test-setup
 --require babel-polyfill
 --recursive
 --require source-map-support/register
