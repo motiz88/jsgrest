@@ -10,7 +10,5 @@ export default function fieldPathToSimpleName(fieldPath)  {
         throw e;
     }
 
-    let result = '';
-
     return parsed[parsed.length-1].name;
 }
