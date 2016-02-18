@@ -1,4 +1,3 @@
-import pgEscape from 'pg-escape';
 import XRegExp from 'xregexp';
 import sql, {join as joinSql, raw as rawSql} from '../sqlTemplate';
 import fieldPathToSql from '../fieldPathToSql';

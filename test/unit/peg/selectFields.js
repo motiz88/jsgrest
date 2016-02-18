@@ -1,5 +1,4 @@
 import selectFields from '../../../src/peg/selectFields';
-import {expect} from 'chai';
 
 describe('selectFields', function() {
     it('should be defined', function() {

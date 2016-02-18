@@ -27,8 +27,6 @@ describe('sqlTemplate', function() {
             join([]).values.should.be.empty;
         });
         it('separator should default to \',\'' , function() {
-            const objval = {a: 'b'};
-
             const frag = join(['a', 'b']);
             frag.should.satisfy(isFragment);
             frag.text.should.equal('$1,$2');
@@ -82,19 +80,25 @@ describe('sqlTemplate', function() {
             });
 
             it('should work with substitutions', function() {
-                const frag = raw `SELECT * FROM "heyHeyHey" WHERE "Col" = ${500} AND OtherCol >= ${1.1}`;
+                const frag = raw `SELECT * FROM "heyHeyHey" WHERE
+                    "Col" = ${500} AND OtherCol >= ${1.1}`;
                 frag.should.satisfy(isFragment);
-                frag.text.should.equal('SELECT * FROM "heyHeyHey" WHERE "Col" = 500 AND OtherCol >= 1.1');
+                frag.text.should.equal(`SELECT * FROM "heyHeyHey" WHERE
+                    "Col" = 500 AND OtherCol >= 1.1`);
                 frag.values.should.be.empty;
             });
 
             it('should work with an embedded fragment', function() {
                 const objval = {a: 'b'};
 
-                const moreConditions = sqlTemplate `OtherCol >= ${1.1} AND ${objval} LIKE ${objval}`;
-                const frag = raw `SELECT * FROM "heyHeyHey" WHERE "Col" = ${500} AND ${moreConditions}`;
+                const moreConditions = sqlTemplate `OtherCol >= ${1.1}
+                    AND ${objval} LIKE ${objval}`;
+                const frag = raw `SELECT * FROM "heyHeyHey" WHERE "Col" = ${500}
+                    AND ${moreConditions}`;
                 frag.should.satisfy(isFragment);
-                frag.text.should.equal('SELECT * FROM "heyHeyHey" WHERE "Col" = 500 AND OtherCol >= $1 AND $2 LIKE $3');
+                frag.text.should.equal(`SELECT * FROM "heyHeyHey" WHERE "Col" = 500
+                    AND OtherCol >= $1
+                    AND $2 LIKE $3`);
                 const values = frag.values;
                 values.should.deep.equal([1.1, objval, objval]);
                 values[1].should.equal(objval);
@@ -121,9 +125,11 @@ describe('sqlTemplate', function() {
         it('should work with one level of parameters', function() {
             const objval = {a: 'b'};
 
-            const frag = sqlTemplate `SELECT * FROM "heyHeyHey" WHERE "Col" = ${500} AND OtherCol >= ${1.1} AND ${objval} LIKE ${objval}`;
+            const frag = sqlTemplate `SELECT * FROM "heyHeyHey" WHERE "Col" = ${500} AND
+                OtherCol >= ${1.1} AND ${objval} LIKE ${objval}`;
             frag.should.satisfy(isFragment);
-            frag.text.should.equal('SELECT * FROM "heyHeyHey" WHERE "Col" = $1 AND OtherCol >= $2 AND $3 LIKE $4');
+            frag.text.should.equal(`SELECT * FROM "heyHeyHey" WHERE "Col" = $1 AND
+                OtherCol >= $2 AND $3 LIKE $4`);
             const values = frag.values;
             values.should.deep.equal([500, 1.1, objval, objval]);
             values[2].should.equal(objval);
@@ -134,9 +140,11 @@ describe('sqlTemplate', function() {
             const objval = {a: 'b'};
 
             const moreConditions = sqlTemplate `OtherCol >= ${1.1} AND ${objval} LIKE ${objval}`;
-            const frag = sqlTemplate `SELECT * FROM "heyHeyHey" WHERE "Col" = ${500} AND ${moreConditions}`;
+            const frag = sqlTemplate `SELECT * FROM "heyHeyHey" WHERE "Col" =
+                ${500} AND ${moreConditions}`;
             frag.should.satisfy(isFragment);
-            frag.text.should.equal('SELECT * FROM "heyHeyHey" WHERE "Col" = $1 AND OtherCol >= $2 AND $3 LIKE $4');
+            frag.text.should.equal(`SELECT * FROM "heyHeyHey" WHERE "Col" =
+                $1 AND OtherCol >= $2 AND $3 LIKE $4`);
             const values = frag.values;
             values.should.deep.equal([500, 1.1, objval, objval]);
             values[2].should.equal(objval);

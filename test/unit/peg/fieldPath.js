@@ -1,5 +1,4 @@
 import fieldPathParser from '../../../src/peg/fieldPath';
-import {expect} from 'chai';
 
 describe('fieldPathParser', function() {
     it('should be defined', function() {

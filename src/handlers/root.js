@@ -1,7 +1,7 @@
 import wrap from '../wrap';
 import requestToOffsetLimit from '../query/requestToOffsetLimit';
 import requestToOrderClause from '../query/requestToOrderClause';
-import sql, {join as joinSql, raw as rawSql} from '../sqlTemplate';
+import sql, {raw as rawSql} from '../sqlTemplate';
 
 export default wrap(async function rootHandler(req, res, next) {
     const qualifiedRelationQuoted = sql `pg_class c

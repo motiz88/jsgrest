@@ -1,4 +1,4 @@
-import chai, {expect} from 'chai';
+import chai from 'chai';
 
 chai.use(require('chai-http'));
 chai.use(require('sinon-chai'));

@@ -1,5 +1,4 @@
 import arrayLiteralParser from '../../../src/peg/arrayLiteral';
-import {expect} from 'chai';
 
 describe('arrayLiteralParser', function() {
     it('should be defined', function() {

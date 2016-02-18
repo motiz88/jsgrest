@@ -9,15 +9,18 @@ export default wrap(async function updateHandler(req, res) {
     if (!req.body)
         return res.sendStatus(400);
 
-    const assignmentsQuoted = Object.keys(req.body)
-        .map(key => sql `${rawSql(pgEscape.ident(key))} = ${req.body[key]}`);
-    if (!assignmentsQuoted.length)
+    const assignmentsQuoted = joinSql(Object.keys(req.body)
+        .map(key => sql `${rawSql(pgEscape.ident(key))} = ${req.body[key]}`)
+    );
+    if (!assignmentsQuoted.text.length)
         return res.sendStatus(400);
 
     const whereClause = requestToWhereClause(req);
-    const returning = rawSql(req.flags.preferRepresentation !== 'headersOnly' ? ' RETURNING *' : '');
-    const query =
-        sql`UPDATE ${qualifiedRelationQuoted} SET ${joinSql(assignmentsQuoted)} ${whereClause} ${returning}`;
+    const returning = rawSql(
+        req.flags.preferRepresentation !== 'headersOnly' ? ' RETURNING *' : ''
+    );
+    const query = sql
+        `UPDATE ${qualifiedRelationQuoted} SET ${assignmentsQuoted} ${whereClause} ${returning}`;
 
     const dbResult = await res.execQuery(query);
     const status = req.flags.preferRepresentation !== 'headersOnly' ? 200 : 204;

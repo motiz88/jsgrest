@@ -1,6 +1,4 @@
 import fieldPathToSql from '../../src/fieldPathToSql';
-import {expect} from 'chai';
-
 
 describe('fieldPathToSql', function() {
     it('should be defined', function() {
