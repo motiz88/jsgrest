@@ -2,7 +2,7 @@
 --require babel-polyfill
 --recursive
 --require source-map-support/register
---reporter spec
+--require mocha-clean
 --invert
 --grep (TODO|DEPRECATED):
 --timeout 10000

@@ -3,7 +3,8 @@
     "plugins": ["transform-object-assign", "transform-flow-strip-types", "transform-runtime"],
     "env": {
         "development": {
-            "sourceMaps": "both"
+            "sourceMaps": "both",
+            "retainLines": true
         }
     }
 }
