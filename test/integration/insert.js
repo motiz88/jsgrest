@@ -221,14 +221,16 @@ describe('Insert', function() {
                         res.should.have.status(201);
                     });
                     it('returns full details of inserted record if asked', async function() {
-                        const res = await post('/no_pk')
+                        const res = await chai.request(appVariants.pure)
+                            .post('/no_pk')
                             .set('Prefer', 'return=representation')
                             .send({a: 'bar', b: 'baz'});
                         res.body.should.deep.equal({a: 'bar', b: 'baz'});
                         res.should.have.status(201);
                     });
                     it('can post nulls', async function() {
-                        const res = await post('/no_pk')
+                        const res = await chai.request(appVariants.pure)
+                            .post('/no_pk')
                             .set('Prefer', 'return=representation')
                             .send({a: null, b: 'foo'});
                         res.body.should.deep.equal({a: null, b: 'foo'});
@@ -344,7 +346,8 @@ describe('Insert', function() {
                     const inserted = {
                         data: [1, 2, 3]
                     };
-                    const res = await post('/json')
+                    const res = await chai.request(appVariants.pure)
+                        .post('/json')
                         .set('Prefer', 'return=representation')
                         .send(inserted);
                     res.body.should.deep.equal(inserted);
