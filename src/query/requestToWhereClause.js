@@ -40,7 +40,7 @@ function likePatternToSql(rhs) {
 
 export default function requestToWhereClause(req) {
     const whereConditions = Object.keys(req.query || {})
-        .filter(key => key !== 'order')
+        .filter(key => key !== 'order' && key !== 'select')
         .map(key => {
             const condition = req.query[key];
             const match = XRegExp.exec(condition, conditionRegex);

@@ -20,6 +20,10 @@ describe('requestToWhereClause', function() {
             .text.should.equal('');
         requestToWhereClause({query: {order: ''}})
             .text.should.equal('');
+        requestToWhereClause({query: {select: ''}})
+            .text.should.equal('');
+        requestToWhereClause({query: {select: '', order: ''}})
+            .text.should.equal('');
     });
 
     describe('operator eq', function() {
