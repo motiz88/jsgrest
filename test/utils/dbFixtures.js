@@ -4,7 +4,6 @@ import {exec} from 'mz/child_process';
 import shellEscape from 'shell-escape-tag';
 
 function logAndExec(command) {
-    console.log(command);
     return exec(command);
 }
 
@@ -13,8 +12,6 @@ async function execSqlFile(file, connectionString) {
         `${testConfig.database.psql} --file=${file}`
         + ' --quiet --set client_min_messages=warning'
         + shellEscape ` ${connectionString || testConfig.database.connectionStringWithDatabase}`);
-    if (stdout)
-        console.log(stdout);
     if (stderr)
         throw new Error(stderr);
     return stdout;
@@ -59,9 +56,7 @@ class TestDb {
 
         ++this.setupCount;
 
-        if (this.setupCount === 1) {
-            await execSqlFile(require.resolve('../fixtures/data.sql'));
-        }
+        await execSqlFile(require.resolve('../fixtures/data.sql'));
 
         return this.connectionString;
     }
