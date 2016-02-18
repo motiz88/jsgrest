@@ -7,7 +7,7 @@ export default function requestToColumnList(req) {
         .map(field => {
             const name = fieldPathToSql(field.name);
             if (field.cast)
-                return `name::${pgEscape.ident(field)}`;
+                return name + '::' + pgEscape.ident(field.cast);
             else
                 return name;
         })

@@ -36,6 +36,11 @@ describe('requestToColumnList', function() {
             .should.equal('a, b, "C"');
     });
 
+    it('with casting', function() {
+        requestToColumnList({query: {select: 'Col::text'}})
+            .should.equal('"Col"::text');
+    });
+
     it('escapes anything suspicious', function() {
         requestToColumnList({query: {select: '* FROM Students; DROP TABLE Students; --'}})
             .should.equal('"* FROM Students; DROP TABLE Students; --"');
