@@ -27,7 +27,7 @@ describe('fieldPathToSql', function() {
                 .should.equal(`a->'b'->>'c'`);
         });
 
-        it(`"A"->'b'->'c'`, function() {
+        it(`"A"->'b'->>'c'`, function() {
             fieldPathToSql('A->b->>c')
                 .should.equal(`"A"->'b'->>'c'`);
         });
