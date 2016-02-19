@@ -74,8 +74,8 @@ export default function sendResult(req, res, next) {
     } else if (res.dbUpdateResult) {
         const result = res.dbUpdateResult;
         const range = {
-            first: 1,
-            last: result.rowCount,
+            first: 0,
+            last: result.rowCount-1,
             length: result.rowCount
         };
         const rangeFormatted = formatContentRange(range);
