@@ -32,7 +32,7 @@ export default function requestToCreateStatement(req) {
         VALUES ${valuesQuoted}
         ${returning}`;
 
-    return req.flags.preferRepresentation === 'headersOnly' ?
+    return req.flags.preferRepresentation !== 'full' ?
         insertSubquery
         : sql `
             WITH t AS (${insertSubquery})

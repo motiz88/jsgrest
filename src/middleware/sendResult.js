@@ -63,7 +63,7 @@ export default function sendResult(req, res, next) {
         const result = res.dbInsertResult;
 
         res.status(201);
-        if (req.flags.preferRepresentation === 'headersOnly')
+        if (req.flags.preferRepresentation !== 'full')
             res.send();
         else {
             const row = result.rows[0];
@@ -73,9 +73,25 @@ export default function sendResult(req, res, next) {
         }
     } else if (res.dbUpdateResult) {
         const result = res.dbUpdateResult;
-        const status = req.flags.preferRepresentation !== 'headersOnly' ? 200 : 204;
-        res.status(status);
-        res.json(result.rows);
+        const range = {
+            first: 1,
+            last: result.rowCount,
+            length: result.rowCount
+        };
+        const rangeFormatted = formatContentRange(range);
+        res.set('Content-Range', rangeFormatted);
+        res.set('Range-Unit', 'items');
+
+        if (result.rowCount === 0)
+            res.sendStatus(404);
+        else if (req.flags.preferRepresentation !== 'full')
+            res.sendStatus(204);
+        else {
+            const row = result.rows[0];
+            const body = row.body;
+            res.set('Content-Type', 'application/json');
+            res.send(body);
+        }
     }
     else
         next();
