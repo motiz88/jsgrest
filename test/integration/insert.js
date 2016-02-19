@@ -355,6 +355,92 @@ describe('Insert', function() {
                 });
             });
         });
+        describe('mixing json and arrays', function() {
+            it('serializes json array', async function() {
+                const inserted = {
+                    json_data: [1, 2, '3']
+                };
+                const res = await post('/array_vs_json?select=json_data')
+                    .set('Prefer', 'return=representation')
+                    .send(inserted);
+                res.body.should.deep.equal(inserted);
+                res.should.have.status(201);
+            });
+            it('serializes json nested array', async function() {
+                const inserted = {
+                    json_data:
+                        [1, [2, '3'], 4, '5', {a: '6', b: {c: 7, d: '8'}, e: [], f: [9, '10']}]
+                };
+                const res = await post('/array_vs_json?select=json_data')
+                    .set('Prefer', 'return=representation')
+                    .send(inserted);
+                res.body.should.deep.equal(inserted);
+                res.should.have.status(201);
+            });
+            it('TODO: serializes json[]', async function() {
+                const inserted = {
+                    jsons:
+                        [[1, [2, '3'], 4, '5', {a: '6', b: {c: 7, d: '8'}, e: [], f: [9, '10']}]]
+                };
+                const res = await post('/array_vs_json?select=jsons')
+                    .set('Prefer', 'return=representation')
+                    .send(inserted);
+                res.body.should.deep.equal(inserted);
+                res.should.have.status(201);
+            });
+            it('serializes jsonb array', async function() {
+                const inserted = {
+                    jsonb_data: [1, 2, '3']
+                };
+                const res = await post('/array_vs_json?select=jsonb_data')
+                    .set('Prefer', 'return=representation')
+                    .send(inserted);
+                res.body.should.deep.equal(inserted);
+                res.should.have.status(201);
+            });
+            it('serializes jsonb nested array', async function() {
+                const inserted = {
+                    jsonb_data:
+                        [1, [2, '3'], 4, '5', {a: '6', b: {c: 7, d: '8'}, e: [], f: [9, '10']}]
+                };
+                const res = await post('/array_vs_json?select=jsonb_data')
+                    .set('Prefer', 'return=representation')
+                    .send(inserted);
+                res.body.should.deep.equal(inserted);
+                res.should.have.status(201);
+            });
+            it('TODO: serializes jsonb[]', async function() {
+                const inserted = {
+                    jsonbs:
+                        [[1, [2, '3'], 4, '5', {a: '6', b: {c: 7, d: '8'}, e: [], f: [9, '10']}]]
+                };
+                const res = await post('/array_vs_json?select=jsonbs')
+                    .set('Prefer', 'return=representation')
+                    .send(inserted);
+                res.body.should.deep.equal(inserted);
+                res.should.have.status(201);
+            });
+            it('TODO: serializes int[]', async function() {
+                const inserted = {
+                    ints: [1, 2, 3]
+                };
+                const res = await post('/array_vs_json?select=ints')
+                    .set('Prefer', 'return=representation')
+                    .send(inserted);
+                res.body.should.deep.equal(inserted);
+                res.should.have.status(201);
+            });
+            it('TODO: serializes text[]', async function() {
+                const inserted = {
+                    texts: ['1', '2', '3']
+                };
+                const res = await post('/array_vs_json?select=texts')
+                    .set('Prefer', 'return=representation')
+                    .send(inserted);
+                res.body.should.deep.equal(inserted);
+                res.should.have.status(201);
+            });
+        });
     });
     describe('TODO: CSV insert', function() {
         describe('disparate csv types', function() {
@@ -540,8 +626,8 @@ describe('Insert', function() {
             );
             it('can provide a representation', async function() {
                 await post('/items')
-                    .send({id: 1});
-                const res = await patch('/items?id=eq.1')
+                    .send({id: 100});
+                const res = await patch('/items?id=eq.100')
                     .set('Prefer', 'return=representation')
                     .send({id: 99});
                 res.body.should.deep.equal([{id:99}]);

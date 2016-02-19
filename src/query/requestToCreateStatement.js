@@ -2,6 +2,7 @@ import requestToQualifiedRelationQuoted from '../query/requestToQualifiedRelatio
 import pgEscape from 'pg-escape';
 import sql, {join as joinSql, raw as rawSql} from '../sqlTemplate';
 import requestToColumnList from '../query/requestToColumnList';
+import prepareSqlValue from '../prepareSqlValue';
 
 export default function requestToCreateStatement(req) {
     const qualifiedRelationQuoted = rawSql(requestToQualifiedRelationQuoted(req));
@@ -15,7 +16,7 @@ export default function requestToCreateStatement(req) {
 
     const valuesQuoted = sql `(${joinSql(
         Object.keys(req.body)
-        .map(key => req.body[key])
+        .map(key => prepareSqlValue(req.body[key]))
     )})`;
 
     const returning =  req.flags.preferRepresentation !== 'headersOnly'

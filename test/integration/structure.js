@@ -26,6 +26,7 @@ describe('GET --> SELECT', function() {
             res.should.have.status(200);
             res.body.should.deep.equal([
                 {schema: 'test', name: 'Escap3e;', insertable: true},
+                {schema: 'test', name: 'array_vs_json', insertable: true},
                 {schema: 'test', name: 'articleStars', insertable: true},
                 {schema: 'test', name: 'articles', insertable: true},
                 {schema: 'test', name: 'authors_only', insertable: true},

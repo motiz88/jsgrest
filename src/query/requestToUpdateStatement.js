@@ -2,6 +2,7 @@ import requestToQualifiedRelationQuoted from '../query/requestToQualifiedRelatio
 import requestToWhereClause from '../query/requestToWhereClause';
 import pgEscape from 'pg-escape';
 import sql, {join as joinSql, raw as rawSql} from '../sqlTemplate';
+import prepareSqlValue from '../prepareSqlValue';
 
 export default function requestToUpdateStatement(req) {
     const qualifiedRelationQuoted = rawSql(requestToQualifiedRelationQuoted(req));
@@ -9,7 +10,7 @@ export default function requestToUpdateStatement(req) {
         throw new Error('PATCH request must have a body');
 
     const assignmentsQuoted = joinSql(Object.keys(req.body)
-        .map(key => sql `${rawSql(pgEscape.ident(key))} = ${req.body[key]}`)
+        .map(key => sql `${rawSql(pgEscape.ident(key))} = ${prepareSqlValue(req.body[key])}`)
     );
     if (!assignmentsQuoted.text.length)
         return new Error('PATCH request body must set at least one field');

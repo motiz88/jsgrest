@@ -604,6 +604,19 @@ CREATE TABLE "withUnique" (
     extra text
 );
 
+--
+-- Name: array_vs_json; Type: TABLE; Schema: test; Owner: -
+--
+
+CREATE TABLE array_vs_json (
+    json_data pg_catalog.json,
+    jsonb_data pg_catalog.jsonb,
+    ints integer[],
+    texts text[],
+    jsons pg_catalog.json[],
+    jsonbs pg_catalog.jsonb[]
+);
+
 
 --
 -- Name: id; Type: DEFAULT; Schema: test; Owner: -
