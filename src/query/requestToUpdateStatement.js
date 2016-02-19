@@ -35,6 +35,4 @@ export default function requestToUpdateStatement(req) {
             WITH t AS (${updateSubquery})
             SELECT ${bodyExpression} as body from t
         `;
-
-    return query;
 }
