@@ -12,7 +12,6 @@ addons:
 node_js:
   - "4.1"
   - "4.0"
-  - "0.12"
 before_script:
   - npm prune --production=false
   - cp test/config.travis.json test/config.json
