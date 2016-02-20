@@ -57,7 +57,6 @@ export default function sendResult(req, res, next) {
         res.set('Range-Unit', 'items');
         res.status(rangeDeleteStatus(range));
 
-        console.log(result);
         res.send();
     } else if (res.dbInsertResult) {
         const result = res.dbInsertResult;

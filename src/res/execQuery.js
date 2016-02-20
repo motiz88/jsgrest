@@ -9,7 +9,6 @@ export default function execQuery(query, ...queryParams) {
         (resolve, reject) =>
             (pg.native || pg).connect(this.dbConfig.connectionString, (err, client, done) => {
                 if (err) {
-                    console.log(query.text, query.values);
                     done();
                     return reject(err);
                 }
