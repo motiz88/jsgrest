@@ -227,7 +227,7 @@ describe('Query', function() {
 
 
     describe('Shaping response with select parameter', function() {
-        it('selectStar works in absense of parameter', async function() {
+        it('selectStar works in absence of parameter', async function() {
             const res = await chai.request(app).get('/complex_items?id=eq.3');
             res.body.should.deep.equal([{id: 3, name: 'Three',
                 settings: {foo: {int: 1, bar: 'baz'}}, arr_data: [1, 2, 3]}]);
