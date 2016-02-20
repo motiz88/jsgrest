@@ -25,7 +25,7 @@ class TestDb {
 
     async setup() {
         await new Promise(
-            (resolve, reject) => pg.connect(testConfig.database.connectionString,
+            (resolve, reject) => (pg.native || pg).connect(testConfig.database.connectionString,
                 (err, client, done) => {
                     if (err) {
                         done();
