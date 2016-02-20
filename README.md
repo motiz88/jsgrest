@@ -28,7 +28,7 @@ Tests for "non-pure" and other missing functionality exist but are [flagged with
 (https://github.com/motiz88/jsgrest/search?utf8=%E2%9C%93&q=TODO) and not run in the main test
 suite.
 
-Please feel free to reach out in any way you like. Issue reports, requests, randoom thoughts and
+Please feel free to reach out in any way you like. Issue reports, requests, random thoughts and
 PRs are most welcome.
 
 # And hey...
