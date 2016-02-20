@@ -13,9 +13,23 @@ This is a bare-bones reimplementation of [@begriffs](https://github.com/begriffs
 * An implementation I can hack on (not being a Haskell coder, I can't do this with PostgREST)
 
 # Progress
-I'm just starting out here. Please feel free to reach out in any way you like.
-My first focus will be a reduced core feature set - mostly just basic reading and writing. See the
-    [Specification] (https://github.com/motiz88/jsgrest/wiki/Specification) for details.
+`jsgrest` recently [passed](https://travis-ci.org/motiz88/jsgrest/jobs/110553520) a [test suite]
+(https://github.com/motiz88/jsgrest/tree/master/test) based largely on PostgREST's own, with some
+omissions due to the reduced feature set I'm targeting right now. Following this milestone, I have
+my eyes set on achieving full compatibility with PostgREST - help is welcome :smile:.
+
+The [issue list](https://github.com/motiz88/jsgrest/issues) is a good place
+to see what's missing at the moment. Notably, `jsgrest` introduces the concept of "pure" mode,
+which disables features that require schema inspection/caching, but *non-pure mode is not currently
+implemented* ([#1](https://github.com/motiz88/jsgrest/issues/1), [#5]
+(https://github.com/motiz88/jsgrest/issues/5), [#7](https://github.com/motiz88/jsgrest/issues/5)).
+
+Tests for "non-pure" and other missing functionality exist but are [flagged with `TODO`]
+(https://github.com/motiz88/jsgrest/search?utf8=%E2%9C%93&q=TODO) and not run in the main test
+suite.
+
+Please feel free to reach out in any way you like. Issue reports, requests, randoom thoughts and
+PRs are most welcome.
 
 # And hey...
 ...at least I didn't call it *PostgrESt*.
