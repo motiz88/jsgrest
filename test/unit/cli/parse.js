@@ -32,9 +32,15 @@ describe('parse', function() {
         expect(parse(['-v'])).to.be.null;
     });
 
-    it('connection-string', function() {
-        parse(required)
-            .should.have.property('connectionString','postgres://');
+    describe('connection-string', function() {
+        it('should be specifiable', function() {
+            parse(required)
+                .should.have.property('connectionString','postgres://');
+        });
+        it('must be a URL', function() {
+            (() => parse(['localhost']))
+                .should.throw;
+        });
     });
 
     it('-P, --pure <-> options.pure', function() {
