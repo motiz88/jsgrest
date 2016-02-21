@@ -37,7 +37,7 @@ describe('requestToCreateStatement', function() {
                 relation: 'aTable'
             },
             body: {}
-        })).should.throw;
+        })).should.throw(Error);
 
         (() => requestToCreateStatement({
             flags: {},
@@ -48,6 +48,6 @@ describe('requestToCreateStatement', function() {
                 relation: 'aTable'
             },
             body: null
-        })).should.throw;
+        })).should.throw(Error);
     });
 });

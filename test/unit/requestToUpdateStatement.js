@@ -42,7 +42,7 @@ describe('requestToUpdateStatement', function() {
                 relation: 'aTable'
             },
             body: {}}))
-        .should.throw;
+        .should.throw(Error);
 
         (() => requestToUpdateStatement({flags: {},
             query: {
@@ -55,6 +55,6 @@ describe('requestToUpdateStatement', function() {
                 relation: 'aTable'
             },
             body: null}))
-        .should.throw;
+        .should.throw(Error);
     });
 });

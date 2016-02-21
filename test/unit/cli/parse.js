@@ -39,7 +39,7 @@ describe('parse', function() {
         });
         it('must be a URL', function() {
             (() => parse(['localhost']))
-                .should.throw;
+                .should.throw(Error);
         });
     });
 
