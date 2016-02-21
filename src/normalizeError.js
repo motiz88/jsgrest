@@ -1,4 +1,5 @@
 export default function normalizeError(error) {
+    /* istanbul ignore if */
     if (!error || typeof error !== 'object')
         return error;
     const {
