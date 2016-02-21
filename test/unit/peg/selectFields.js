@@ -10,7 +10,7 @@ import selectFieldsCompiled from '../../../src/peg/selectFields.pegjs.js';
     description: 'selectFields compiled'
 }]
 .forEach(({selectFields, description}) => {
-    describe('selectFields', function() {
+    describe(description, function() {
         it('should be defined', function() {
             selectFields.should.exist;
             selectFields.should.be.an('object');

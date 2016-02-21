@@ -10,7 +10,7 @@ import fieldPathParserCompiled from '../../../src/peg/fieldPath.pegjs.js';
     description: 'fieldPathParser compiled'
 }]
 .forEach(({fieldPathParser, description}) => {
-    describe('fieldPathParser', function() {
+    describe(description, function() {
         it('should be defined', function() {
             fieldPathParser.should.exist;
             fieldPathParser.should.be.an('object');

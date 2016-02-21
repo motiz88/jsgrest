@@ -10,7 +10,7 @@ import arrayLiteralParserCompiled from '../../../src/peg/arrayLiteral.pegjs.js';
     description: 'arrayLiteralParser compiled'
 }]
 .forEach(({arrayLiteralParser, description}) => {
-    describe('arrayLiteralParser', function() {
+    describe(description, function() {
         it('should be defined', function() {
             arrayLiteralParser.should.exist;
             arrayLiteralParser.should.be.an('object');
