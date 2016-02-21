@@ -1,10 +1,6 @@
 import pg from '@motiz88/pg';
 
-export default function execQuery(query, ...queryParams) {
-    if (typeof query === 'string')
-    {
-        query = {text: query, values: queryParams};
-    }
+export default function execQuery(query) {
     return new Promise(
         (resolve, reject) => pg.connect(this.dbConfig.connectionString, (err, client, done) => {
             if (err) {
