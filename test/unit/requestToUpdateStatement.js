@@ -29,4 +29,32 @@ describe('requestToUpdateStatement', function() {
         stmt.text.should.match(/UPDATE/i) ;
         stmt.values.should.be.an('array');
     });
+
+    it('should fail if body is empty', function() {
+        (() => requestToUpdateStatement({flags: {},
+            query: {
+                col: 'eq.0'
+            },
+            dbConfig: {
+                schema: 'public'
+            },
+            params: {
+                relation: 'aTable'
+            },
+            body: {}}))
+        .should.throw;
+
+        (() => requestToUpdateStatement({flags: {},
+            query: {
+                col: 'eq.0'
+            },
+            dbConfig: {
+                schema: 'public'
+            },
+            params: {
+                relation: 'aTable'
+            },
+            body: null}))
+        .should.throw;
+    });
 });

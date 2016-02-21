@@ -26,4 +26,28 @@ describe('requestToCreateStatement', function() {
         stmt.text.should.match(/INSERT/i);
         stmt.values.should.be.an('array');
     });
+
+    it('should fail if body is empty', function() {
+        (() => requestToCreateStatement({
+            flags: {},
+            dbConfig: {
+                schema: 'public'
+            },
+            params: {
+                relation: 'aTable'
+            },
+            body: {}
+        })).should.throw;
+
+        (() => requestToCreateStatement({
+            flags: {},
+            dbConfig: {
+                schema: 'public'
+            },
+            params: {
+                relation: 'aTable'
+            },
+            body: null
+        })).should.throw;
+    });
 });
