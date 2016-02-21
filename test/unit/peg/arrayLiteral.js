@@ -1,30 +1,41 @@
-import arrayLiteralParser from '../../../src/peg/arrayLiteral';
+import dynamicRequire from '../../../src/peg/dynamicRequire';
+const arrayLiteralParserDynamic = dynamicRequire('../../../src/peg/arrayLiteral');
+import arrayLiteralParserCompiled from '../../../src/peg/arrayLiteral.pegjs.js';
 
-describe('arrayLiteralParser', function() {
-    it('should be defined', function() {
-        arrayLiteralParser.should.exist;
-        arrayLiteralParser.should.be.an('object');
-    });
-
-    describe('#parse', function() {
+[{
+    arrayLiteralParser: arrayLiteralParserDynamic,
+    description: 'arrayLiteralParser'
+}, {
+    arrayLiteralParser: arrayLiteralParserCompiled,
+    description: 'arrayLiteralParser compiled'
+}]
+.forEach(({arrayLiteralParser, description}) => {
+    describe('arrayLiteralParser', function() {
         it('should be defined', function() {
-            arrayLiteralParser.parse.should.exist;
-            arrayLiteralParser.parse.should.be.a('function');
+            arrayLiteralParser.should.exist;
+            arrayLiteralParser.should.be.an('object');
         });
 
-        it('empty array', function() {
-            arrayLiteralParser.parse('{}')
-                .should.deep.equal([]);
-        });
+        describe('#parse', function() {
+            it('should be defined', function() {
+                arrayLiteralParser.parse.should.exist;
+                arrayLiteralParser.parse.should.be.a('function');
+            });
 
-        it('simple array', function() {
-            arrayLiteralParser.parse('{1,2,ack,pth}')
-                .should.deep.equal(['1', '2', 'ack', 'pth']);
-        });
+            it('empty array', function() {
+                arrayLiteralParser.parse('{}')
+                    .should.deep.equal([]);
+            });
 
-        it('array of arrays', function() {
-            arrayLiteralParser.parse('{{1,2,ack,pth},{foo},bar}')
-                .should.deep.equal([['1', '2', 'ack', 'pth'], ['foo'], 'bar']);
+            it('simple array', function() {
+                arrayLiteralParser.parse('{1,2,ack,pth}')
+                    .should.deep.equal(['1', '2', 'ack', 'pth']);
+            });
+
+            it('array of arrays', function() {
+                arrayLiteralParser.parse('{{1,2,ack,pth},{foo},bar}')
+                    .should.deep.equal([['1', '2', 'ack', 'pth'], ['foo'], 'bar']);
+            });
         });
     });
 });

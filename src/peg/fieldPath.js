@@ -1,3 +1,4 @@
+/* istanbul ignore next */
 if (process.env.USE_PEGJS_REQUIRE)
     module.exports = require('./dynamicRequire')('./fieldPath.pegjs');
 else
