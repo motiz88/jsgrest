@@ -17,7 +17,7 @@
     "dev-unit": "cross-env USE_PEGJS_REQUIRE=1 chokidar -d 1000 -t 10000 \"src/\" \"test/\" package.json  .babelrc  --initial -i \"*test/data*\" -c \"mocha test/unit/**/*.js\"",
     "dev-integration": "cross-env USE_PEGJS_REQUIRE=1 chokidar -d 1000 -t 10000 \"src/\" \"test/\" package.json  .babelrc  --initial -i \"*test/data*\" -c \"mocha test/integration/**/*.js\"",
     "nodemon": "cross-env USE_PEGJS_REQUIRE=1 nodemon --exec babel-node -- src/cli",
-    "coveralls": "cross-env USE_PEGJS_REQUIRE=1 istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "coveralls": "cross-env USE_PEGJS_REQUIRE=1 istanbul cover -x **/*.pegjs.js ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "author": "Moti Zilberman <motiz88@gmail.com>",
   "license": "MIT",
