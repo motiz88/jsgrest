@@ -35,6 +35,18 @@ describe('App', function() {
                 .get('/');
             res.should.have.status(200);
         });
+
+        describe('/rpc', function() {
+            // TODO: implement rpc routes. In the mean time let's check that they're reserved.
+            it('should not allow requests while feature is not implemented', async function() {
+                await chai.request(app)
+                    .get('/rpc')
+                    .should.eventually.be.rejected;
+                await chai.request(app)
+                    .get('/rpc/whatever')
+                    .should.eventually.be.rejected;
+            });
+        });
     });
 
     describe('instance with bad connection string', function() {
