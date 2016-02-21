@@ -1,5 +1,5 @@
 import dynamicRequire from '../../../src/peg/dynamicRequire';
-const fieldPathParserDynamic = dynamicRequire('../../../src/peg/fieldPath');
+const fieldPathParserDynamic = dynamicRequire(require.resolve('../../../src/peg/fieldPath'));
 import fieldPathParserCompiled from '../../../src/peg/fieldPath.pegjs.js';
 
 [{

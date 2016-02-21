@@ -1,5 +1,5 @@
 import dynamicRequire from '../../../src/peg/dynamicRequire';
-const selectFieldsDynamic = dynamicRequire('../../../src/peg/selectFields');
+const selectFieldsDynamic = dynamicRequire(require.resolve('../../../src/peg/selectFields'));
 import selectFieldsCompiled from '../../../src/peg/selectFields.pegjs.js';
 
 [{

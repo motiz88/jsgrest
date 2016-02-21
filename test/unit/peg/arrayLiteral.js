@@ -1,5 +1,5 @@
 import dynamicRequire from '../../../src/peg/dynamicRequire';
-const arrayLiteralParserDynamic = dynamicRequire('../../../src/peg/arrayLiteral');
+const arrayLiteralParserDynamic = dynamicRequire(require.resolve('../../../src/peg/arrayLiteral'));
 import arrayLiteralParserCompiled from '../../../src/peg/arrayLiteral.pegjs.js';
 
 [{
