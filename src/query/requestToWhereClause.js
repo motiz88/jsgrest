@@ -47,8 +47,12 @@ export default function requestToWhereClause(req) {
             if (!match)
                 throw new Error(`Unrecognized query condition ${key}=${condition}`);
             let sqlOp = operatorMap[match.operator || ''];
+
+            /* istanbul ignore if:
+                This will only happen if operatorMap is out of sync with conditionRegex */
             if (!sqlOp)
                 throw new Error('No such operator: ' + match.operator);
+
             sqlOp = rawSql(sqlOp);
             let sqlRhs;
             switch (match.operator) {

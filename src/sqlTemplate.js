@@ -28,10 +28,11 @@ class Fragment {
         let result = '';
         for (let i = 0; i < this.parts.length; ++i) {
             const part = this.parts[i];
-            if (isFragment(part))
-                result += part.toString(paramIndex);
-            else if (isValueReference(part))
+            if (isValueReference(part))
                 result += `$${++paramIndex}`;
+            else /* istanbul ignore if: fragments are always flattened */
+                if (isFragment(part))
+                result += part.toString(paramIndex);
             else
                 result += part;
         }
@@ -42,10 +43,12 @@ class Fragment {
         let result = [];
         for (let i = 0; i < this.parts.length; ++i) {
             const part = this.parts[i];
-            if (isFragment(part))
-                result.push(...part.values);
-            else if (isValueReference(part))
+            if (isValueReference(part))
                 result.push(part.value);
+            else /* istanbul ignore if: fragments are always flattened */
+                if (isFragment(part))
+                result.push(...part.values);
+
         }
         return result;
     }
@@ -88,8 +91,6 @@ export function isFragment(x) {
 export function join(arr, s) {
     if (typeof s !== 'string')
         s = ',';
-    if (!Array.isArray(arr))
-        return arr;
     const filler = Array(arr.length+1).fill(s);
     filler[0] = '';
     filler[filler.length-1] = '';

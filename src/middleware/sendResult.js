@@ -92,6 +92,7 @@ export default function sendResult(req, res, next) {
             res.send(body);
         }
     }
+    /* istanbul ignore else */
     else
         next();
 }

@@ -6,9 +6,11 @@ export default function fieldPathToSql(fieldPath)  {
     try {
         parsed = fieldPathParser.parse(fieldPath);
     } catch(e) {
+        /* istanbul ignore else */
         if (e instanceof fieldPathParser.SyntaxError)
             return pgEscape.ident(fieldPath);
-        throw e;
+        else
+            throw e;
     }
 
     let result = '';

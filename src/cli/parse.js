@@ -44,6 +44,7 @@ export default function parse(argv: Array<string>): ?ParsedArguments
         args = parser.parseArgs(argv);
     }
     catch(e) {
+        /* istanbul ignore else */
         if (e instanceof ParserSuccessfulExit)
             return null;
         else

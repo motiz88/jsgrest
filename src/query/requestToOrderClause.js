@@ -14,6 +14,7 @@ export default function requestToOrderClause(req) {
         .filter(Boolean)
         .map(spec => {
             const match = XRegExp.exec(spec, specRegex);
+            /* istanbul ignore if: specRegex is pretty much 100% permissive here */
             if (!match)
                 throw new Error(`Unrecognized order spec ${spec}`);
             const columnQuoted = pgEscape.ident(match.column);

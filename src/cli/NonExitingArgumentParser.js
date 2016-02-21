@@ -7,6 +7,7 @@ export class ParserSuccessfulExit {
     }
 }
 
+/* istanbul ignore next */
 export default class NonExitingArgumentParser extends ArgumentParser {
     constructor(options) {
         super(options);
