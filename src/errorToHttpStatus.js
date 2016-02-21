@@ -30,7 +30,7 @@ const codes = {
 
 export default function errorToHttpStatus(error) {
     const code = (error ? error.code : '') || '';
-    for (let codePrefix of[code, code.substr(0, 2)])
+    for (let codePrefix of [code, code.substr(0, 2)])
         if (codePrefix in codes)
             return codes[codePrefix];
     /* istanbul ignore next */
