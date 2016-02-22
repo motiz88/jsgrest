@@ -9,6 +9,41 @@ Postgres REST API server in JavaScript (a la PostgREST).
 This is a bare-bones reimplementation of [@begriffs](https://github.com/begriffs)'s fantastic
     [PostgREST] (https://github.com/begriffs/postgrest) in JavaScript.
 
+# Installing
+
+Node v4 and above is required.
+
+```sh
+npm install -g jsgrest
+```
+
+# Usage
+
+## From the command line
+
+```sh
+jsgrest postgres://postgres:foobar@localhost:5432/my_db \
+          --port 3000 \
+          --schema public \
+          --pure
+```
+
+## API
+
+`jsgrest` exposes a factory function that returns an [Express](http://expressjs.com/) app, which you
+can then use in your own server code.
+
+```javascript
+import createJsgrest from 'jsgrest';
+
+app.use('/db', createJsgrest({
+    connectionString: 'postgres://postgres:foobar@localhost:5432/my_db',
+    schema: 'public',
+    pure: true
+}));
+
+```
+
 # Goals
 * Maximum API compatibility with PostgREST
 * Reasonable performance
