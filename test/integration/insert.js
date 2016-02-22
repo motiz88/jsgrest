@@ -639,6 +639,7 @@ describe('Insert', function() {
                 const res = await patch('/items?id=eq.100')
                     .set('Prefer', 'return=representation')
                     .send({id: 99});
+                res.should.have.status(200);
                 res.body.should.deep.equal([{id:99}]);
             });
             it('can set a json column to escaped value', async function() {

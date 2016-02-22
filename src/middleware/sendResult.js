@@ -88,6 +88,7 @@ export default function sendResult(req, res, next) {
         else {
             const row = result.rows[0];
             const body = row.body;
+            res.status(200);
             res.set('Content-Type', 'application/json');
             res.send(body);
         }
