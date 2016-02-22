@@ -87,5 +87,8 @@
     "express": "^4.13.4",
     "pg-escape": "motiz88/pg-escape",
     "xregexp": "^3.0.0"
+  },
+  "engines": {
+      "node": ">=4"
   }
 }
