@@ -10,8 +10,10 @@ addons:
     - g++-4.8
   postgresql: "9.4"
 node_js:
+  - "0.12"
   - "4.1"
   - "4.0"
+  - "5"
 before_script:
   - npm prune --production=false
   - cp test/config.travis.json test/config.json
