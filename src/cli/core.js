@@ -1,6 +1,3 @@
-if (process.env.NODE_ENV !== 'production') {
-    require('longjohn');
-}
 import parse from './parse';
 import createApp from '../app';
 
