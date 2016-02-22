@@ -4,7 +4,9 @@
   "description": "Postgres REST API server in JavaScript (a la PostgREST)",
   "main": "dist/index.js",
   "jsnext:main": "src/index.js",
-  "bin": "dist/cli/index.js",
+  "bin": {
+      "jsgrest": "dist/cli/index.js"
+  },
   "jsnext:bin": "src/cli/index.js",
   "scripts": {
     "build": "eslint src demo test && npm run build-peg && cross-env BABEL_ENV=production babel -D src -d dist && dependency-check package.json --no-default-entries --entry dist/cli/index.js",
