@@ -1,11 +1,11 @@
 {
   "name": "jsgrest",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Postgres REST API server in JavaScript (a la PostgREST)",
   "main": "dist/index.js",
   "jsnext:main": "src/index.js",
   "bin": {
-      "jsgrest": "dist/cli/index.js"
+    "jsgrest": "dist/cli/index.js"
   },
   "jsnext:bin": "src/cli/index.js",
   "scripts": {
