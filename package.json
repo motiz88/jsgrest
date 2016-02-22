@@ -1,6 +1,6 @@
 {
   "name": "jsgrest",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Postgres REST API server in JavaScript (a la PostgREST)",
   "main": "dist/index.js",
   "jsnext:main": "src/index.js",
@@ -89,6 +89,6 @@
     "xregexp": "^3.0.0"
   },
   "engines": {
-      "node": ">=4"
+    "node": ">=4"
   }
 }
