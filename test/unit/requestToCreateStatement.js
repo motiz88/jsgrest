@@ -27,18 +27,7 @@ describe('requestToCreateStatement', function() {
         stmt.values.should.be.an('array');
     });
 
-    it('should fail if body is empty', function() {
-        (() => requestToCreateStatement({
-            flags: {},
-            dbConfig: {
-                schema: 'public'
-            },
-            params: {
-                relation: 'aTable'
-            },
-            body: {}
-        })).should.throw(Error);
-
+    it('should fail if no body', function() {
         (() => requestToCreateStatement({
             flags: {},
             dbConfig: {
@@ -49,5 +38,18 @@ describe('requestToCreateStatement', function() {
             },
             body: null
         })).should.throw(Error);
+    });
+
+    it('should succeed if body is an empty object', function() {
+        requestToCreateStatement({
+            flags: {},
+            dbConfig: {
+                schema: 'public'
+            },
+            params: {
+                relation: 'aTable'
+            },
+            body: {}
+        }).text.should.match(/DEFAULT VALUES/i);
     });
 });

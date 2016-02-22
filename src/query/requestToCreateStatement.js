@@ -29,9 +29,13 @@ export default function requestToCreateStatement(req) {
         coalesce(array_to_json(array_agg(row_to_json(t))), '[]')::character varying
     `;
 
-    const insertSubquery = sql `INSERT INTO ${qualifiedRelationQuoted} ${fieldsQuoted}
-        VALUES ${valuesQuoted}
-        ${returning}`;
+    const insertSubquery = Object.keys(req.body).length ?
+        sql `INSERT INTO ${qualifiedRelationQuoted} ${fieldsQuoted}
+            VALUES ${valuesQuoted}
+            ${returning}`
+        : sql `INSERT INTO ${qualifiedRelationQuoted}
+            DEFAULT VALUES
+            ${returning}`;
 
     return req.flags.preferRepresentation !== 'full' ?
         insertSubquery

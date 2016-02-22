@@ -441,6 +441,15 @@ describe('Insert', function() {
                 res.should.have.status(201);
             });
         });
+        describe('not setting any columns', function() {
+            it('creates a row with default values', async function() {
+                const res = await post('/nullable_integer')
+                    .set('Prefer', 'return=representation')
+                    .send({});
+                res.should.have.status(201);
+                res.body.should.deep.equal({a: null});
+            });
+        });
     });
     describe('TODO: CSV insert', function() {
         describe('disparate csv types', function() {
