@@ -8,7 +8,7 @@
     "build": "eslint src demo test && npm run build-peg && cross-env BABEL_ENV=production babel -D src -d dist && dependency-check package.json --no-default-entries --entry dist/cli/index.js",
     "build-peg": "node build-peg src/peg/**.pegjs",
     "test": "cross-env USE_PEGJS_REQUIRE=1 mocha && npm run test-dist",
-    "test-dist": "node build-tests && mocha --opts mocha-dist.opts test-dist",
+    "test-dist": "node build-test && mocha --opts mocha-dist.opts test-dist",
     "prepublish": "npm run build",
     "eslint": "eslint src/**/*.js  demo/**/*.js test/**/*.js",
     "eclint": "eclint check *.js *.json *.sublime-project *.md *.yml *.*rc *.*ignore src/**/*.js demo/**/*.js test/**/*.js",
