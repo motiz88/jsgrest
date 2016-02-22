@@ -23,9 +23,9 @@ npm install -g jsgrest
 
 ```sh
 jsgrest postgres://postgres:foobar@localhost:5432/my_db \
-          --port 3000 \
-          --schema public \
-          --pure
+        --port 3000 \
+        --schema public \
+        --pure
 ```
 
 ## API
