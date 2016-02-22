@@ -1,1 +1,3 @@
 **/*.pegjs.js
+test-dist/**/*.js
+dist/**/*.js

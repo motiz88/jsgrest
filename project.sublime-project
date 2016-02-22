@@ -3,7 +3,8 @@
     [
         {
             "path": ".",
-            "folder_exclude_patterns": ["node_modules*", "dist", ".babel-cache", ".vscode"],
+            "folder_exclude_patterns": ["node_modules*", "dist", ".babel-cache", ".vscode",
+                "test-dist"],
             "file_exclude_patterns": ["*.pegjs.js"]
         }
     ]

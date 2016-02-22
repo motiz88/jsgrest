@@ -1,0 +1,6 @@
+--recursive
+--require source-map-support/register
+--require mocha-clean
+--invert
+--grep (TODO|DEPRECATED):
+--timeout 10000
