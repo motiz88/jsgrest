@@ -13,7 +13,7 @@ export default function requestToUpdateStatement(req) {
         .map(key => sql `${rawSql(pgEscape.ident(key))} = ${prepareSqlValue(req.body[key])}`)
     );
     if (!assignmentsQuoted.text.length)
-        return new Error('PATCH request body must set at least one field');
+        throw new Error('PATCH request body must set at least one field');
 
     const whereClause = requestToWhereClause(req);
 
