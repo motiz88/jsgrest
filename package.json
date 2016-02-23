@@ -60,7 +60,6 @@
     "fs-extra-promise": "^0.3.1",
     "glob": "^7.0.0",
     "glob-promise": "^1.0.6",
-    "isparta": "^4.0.0",
     "istanbul": "^1.0.0-alpha.2",
     "jscodeshift": "^0.3.13",
     "lodash": "^3.10.1",
