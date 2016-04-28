@@ -34,7 +34,7 @@ describe('Query', function() {
         fDelete = makeFetchHelper('DELETE'),
         fOptions = makeFetchHelper('OPTIONS');
 
-    let get, post, put, patch;
+    let get, post;
 
     before(function() {
         app = createApp({
