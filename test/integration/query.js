@@ -30,12 +30,11 @@ describe('Query', function() {
         });
     };
     const fPost = makeFetchHelper('POST'),
-        fPut = makeFetchHelper('PUT'),
         fPatch = makeFetchHelper('PATCH'),
         fDelete = makeFetchHelper('DELETE'),
         fOptions = makeFetchHelper('OPTIONS');
 
-    let req, get, post, put, patch;
+    let get, post, put, patch;
 
     before(function() {
         app = createApp({
@@ -45,8 +44,6 @@ describe('Query', function() {
         const req = chai.request(app);
         get = req.get.bind(req);
         post = req.post.bind(req);
-        put = req.put.bind(req);
-        patch = req.patch.bind(req);
 
         appServer = http.createServer(app);
     });
