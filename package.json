@@ -1,6 +1,6 @@
 {
   "name": "jsgrest",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Postgres REST API server in JavaScript (a la PostgREST)",
   "main": "dist/index.js",
   "jsnext:main": "src/index.js",
