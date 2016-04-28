@@ -2,6 +2,7 @@ import express from 'express';
 import sendSelectQuery from './res/sendSelectQuery';
 import execQuery from './res/execQuery';
 import rootHandler from './handlers/root';
+import invokeHandler from './handlers/invoke';
 import selectHandler from './handlers/select';
 import insertHandler from './handlers/insert';
 import updateHandler from './handlers/update';
@@ -11,6 +12,7 @@ import sendResult from './middleware/sendResult';
 import bodyParser from 'body-parser';
 import rangeParser from './middleware/rangeParser';
 import flagParser from './middleware/flags';
+import actionParser from './middleware/actions';
 
 type AppInitArgs = {connectionString: string, schema: string, pure: boolean};
 
@@ -28,14 +30,13 @@ export default function createApp({connectionString, schema, pure}: AppInitArgs)
         next();
     });
 
+    app.use(actionParser);
     app.use(flagParser);
     app.use(rangeParser);
 
     app.get('/', rootHandler);
 
-    app.use('/rpc/', () => {
-        throw new Error('RPC routes not implemented');
-    });
+    app.use('/rpc/:relation', parseJson, invokeHandler);
 
     app.get('/:relation', selectHandler);
     app.post('/:relation', parseJson, insertHandler);

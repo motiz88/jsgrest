@@ -17,11 +17,37 @@ describe('Query', function() {
 
     let app, appServer,
         appFetch = (path, ...args) => fetch(serverAddress(appServer, path), ...args);
+
+    const makeFetchHelper = method => (path, body, options) => {
+        const {headers, ...otherOptions} = options || {};
+        return appFetch(path, {
+            method,
+            body: typeof body === 'string' ? body : JSON.stringify(body),
+            headers: Object.assign(body ? {
+                'Content-Type': 'application/json'
+            } : {}, headers || {}),
+            ...otherOptions
+        });
+    };
+    const fPost = makeFetchHelper('POST'),
+        fPut = makeFetchHelper('PUT'),
+        fPatch = makeFetchHelper('PATCH'),
+        fDelete = makeFetchHelper('DELETE'),
+        fOptions = makeFetchHelper('OPTIONS');
+
+    let req, get, post, put, patch;
+
     before(function() {
         app = createApp({
             connectionString: dbFixtures.connectionString,
             schema: 'test'
         });
+        const req = chai.request(app);
+        get = req.get.bind(req);
+        post = req.post.bind(req);
+        put = req.put.bind(req);
+        patch = req.patch.bind(req);
+
         appServer = http.createServer(app);
     });
 
@@ -31,7 +57,7 @@ describe('Query', function() {
 
     describe('Querying a table with a column called count', function() {
         it('should not confuse count column with pg_catalog.count aggregate', async function() {
-            const res = await chai.request(app).get('/has_count_column');
+            const res = await get('/has_count_column');
             res.should.have.status(200);
         });
     });
@@ -45,14 +71,14 @@ describe('Query', function() {
 
     describe('Filtering response', function() {
         it('matches with equality', async function() {
-            const res = await chai.request(app).get('/items?id=eq.5');
+            const res = await get('/items?id=eq.5');
             res.should.have.status(200);
             res.body.should.deep.equal([{id: 5}]);
             res.should.have.header('Content-Range', '0-0/1');
         });
 
         it('matches with equality using not operator', async function() {
-            const res = await chai.request(app).get('/items?id=not.eq.5');
+            const res = await get('/items?id=not.eq.5');
             res.should.have.status(200);
             res.body.should.deep.equal([{id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 6},
                 {id: 7}, {id: 8}, {id: 9}, {id: 10}, {id: 11}, {id: 12}, {id: 13},
@@ -61,26 +87,26 @@ describe('Query', function() {
         });
 
         it('matches with more than one condition using not operator', async function() {
-            const res = await chai.request(app).get('/simple_pk?k=like.*yx&extra=not.eq.u');
+            const res = await get('/simple_pk?k=like.*yx&extra=not.eq.u');
             res.body.should.deep.equal([]);
         });
 
         it('matches with inequality using not.lt operator', async function() {
-            const res = await chai.request(app).get('/items?id=not.lt.14&order=id.asc');
+            const res = await get('/items?id=not.lt.14&order=id.asc');
             res.should.have.status(200);
             res.body.should.deep.equal([{id: 14}, {id: 15}]);
             res.should.have.header('Content-Range', '0-1/2');
         });
 
         it('matches with inequality using not.gt operator', async function() {
-            const res = await chai.request(app).get('/items?id=not.gt.2&order=id.asc');
+            const res = await get('/items?id=not.gt.2&order=id.asc');
             res.should.have.status(200);
             res.body.should.deep.equal([{id: 1}, {id: 2}]);
             res.should.have.header('Content-Range', '0-1/2');
         });
 
         it('matches items IN', async function() {
-            const res = await chai.request(app).get('/items?id=in.1,3,5');
+            const res = await get('/items?id=in.1,3,5');
             res.should.have.status(200);
             res.body.should.deep.equal([{id: 1}, {id: 3}, {id: 5}]);
             res.should.have.header('Content-Range', '0-2/3');
@@ -103,38 +129,38 @@ describe('Query', function() {
         });
 
         it('matches nulls using not operator', async function() {
-            const res = await chai.request(app).get('/no_pk?a=not.is.null');
+            const res = await get('/no_pk?a=not.is.null');
             res.body.should.deep.equal([{a: '1', b: '0'}, {a: '2', b: '0'}]);
         });
 
         it('matches nulls in varchar and numeric fields alike', async function() {
-            (await chai.request(app).get('/no_pk?a=is.null'))
+            (await get('/no_pk?a=is.null'))
                 .body.should.deep.equal([{a: null, b: null}]);
-            (await chai.request(app).get('/nullable_integer?a=is.null'))
+            (await get('/nullable_integer?a=is.null'))
                 .body.should.deep.equal([{a: null}]);
         });
 
         it('matches with like', async function() {
-            (await chai.request(app).get('/simple_pk?k=like.*yx'))
+            (await get('/simple_pk?k=like.*yx'))
                 .body.should.deep.equal([{k: 'xyyx', extra: 'u'}]);
-            (await chai.request(app).get('/simple_pk?k=like.xy*'))
+            (await get('/simple_pk?k=like.xy*'))
                 .body.should.deep.equal([{k: 'xyyx', extra: 'u'}]);
-            (await chai.request(app).get('/simple_pk?k=like.*YY*'))
+            (await get('/simple_pk?k=like.*YY*'))
                 .body.should.deep.equal([{k: 'xYYx', extra: 'v'}]);
         });
 
         it('matches with like using not operator', async function() {
-            const res = await chai.request(app).get('/simple_pk?k=not.like.*yx');
+            const res = await get('/simple_pk?k=not.like.*yx');
             res.body.should.deep.equal([{k:'xYYx', extra: 'v'}]);
         });
 
         it('matches with ilike', async function() {
-            (await chai.request(app).get('/simple_pk?k=ilike.xy*&order=extra.asc'))
+            (await get('/simple_pk?k=ilike.xy*&order=extra.asc'))
                 .body.should.deep.equal([
                     {k: 'xyyx', extra: 'u'},
                     {k: 'xYYx', extra: 'v'}
                 ]);
-            (await chai.request(app).get('/simple_pk?k=ilike.*YY*&order=extra.asc'))
+            (await get('/simple_pk?k=ilike.*YY*&order=extra.asc'))
                 .body.should.deep.equal([
                     {k: 'xyyx', extra: 'u'},
                     {k: 'xYYx', extra: 'v'}
@@ -142,31 +168,31 @@ describe('Query', function() {
         });
 
         it('matches with ilike using not operator', async function() {
-            const res = await chai.request(app).get('/simple_pk?k=not.ilike.xy*&order=extra.asc');
+            const res = await get('/simple_pk?k=not.ilike.xy*&order=extra.asc');
             res.body.should.deep.equal([]);
         });
 
         it('matches with tsearch @@', async function() {
-            const res = await chai.request(app).get('/tsearch?text_search_vector=@@.foo');
+            const res = await get('/tsearch?text_search_vector=@@.foo');
             res.body.should.deep.equal([{text_search_vector: "'bar':2 'foo':1"}]);
         });
 
         it('matches with tsearch @@ using not operator', async function() {
-            const res = await chai.request(app).get('/tsearch?text_search_vector=not.@@.foo');
+            const res = await get('/tsearch?text_search_vector=not.@@.foo');
             res.body.should.deep.equal([{
                 text_search_vector: "'baz':1 'qux':2"
             }]);
         });
 
         it('TODO: matches with computed column', async function() {
-            const res = await chai.request(app).get('/items?always_true=eq.true&order=id.asc');
+            const res = await get('/items?always_true=eq.true&order=id.asc');
             res.body.should.deep.equal([{id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}, {id: 6},
                 {id: 7}, {id: 8}, {id: 9}, {id: 10}, {id: 11}, {id: 12}, {id: 13},
                 {id: 14}, {id: 15}]);
         });
 
         it('TODO: order by computed column', async function() {
-            const res = await chai.request(app).get('/items?order=anti_id.desc');
+            const res = await get('/items?order=anti_id.desc');
             res.body.should.deep.equal([{id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}, {id: 6},
                 {id: 7}, {id: 8}, {id: 9}, {id: 10}, {id: 11}, {id: 12}, {id: 13},
                 {id: 14}, {id: 15}]);
@@ -210,12 +236,12 @@ describe('Query', function() {
         });
 
         it('matches with @> operator', async function() {
-            const res = await chai.request(app).get('/complex_items?select=id&arr_data=@>.{2}');
+            const res = await get('/complex_items?select=id&arr_data=@>.{2}');
             res.body.should.deep.equal([{id: 2}, {id: 3}]);
         });
 
         it('matches with <@ operator', async function() {
-            const res = await chai.request(app).get('/complex_items?select=id&arr_data=<@.{1,2,4}');
+            const res = await get('/complex_items?select=id&arr_data=<@.{1,2,4}');
             res.body.should.deep.equal([{id: 1}, {id: 2}]);
         });
 
@@ -228,23 +254,23 @@ describe('Query', function() {
 
     describe('Shaping response with select parameter', function() {
         it('selectStar works in absence of parameter', async function() {
-            const res = await chai.request(app).get('/complex_items?id=eq.3');
+            const res = await get('/complex_items?id=eq.3');
             res.body.should.deep.equal([{id: 3, name: 'Three',
                 settings: {foo: {int: 1, bar: 'baz'}}, arr_data: [1, 2, 3]}]);
         });
 
         it('one simple column', async function() {
-            const res = await chai.request(app).get('/complex_items?select=id');
+            const res = await get('/complex_items?select=id');
             res.body.should.deep.equal([{id: 1}, {id: 2}, {id: 3}]);
         });
 
         it('one simple column with casting (text)', async function() {
-            const res = await chai.request(app).get('/complex_items?select=id::text');
+            const res = await get('/complex_items?select=id::text');
             res.body.should.deep.equal([{id: '1'}, {id: '2'}, {id: '3'}]);
         });
 
         it('json column', async function() {
-            const res = await chai.request(app).get('/complex_items?id=eq.1&select=settings');
+            const res = await get('/complex_items?id=eq.1&select=settings');
             res.body.should.deep.equal([{settings: {foo: {int: 1, bar: 'baz'}}}]);
         });
 
@@ -304,12 +330,12 @@ describe('Query', function() {
         });
 
         it('TODO: rows with missing parents are included', async function() {
-            const res = await chai.request(app).get('/projects?id=in.1,5&select=id,clients{id}');
+            const res = await get('/projects?id=in.1,5&select=id,clients{id}');
             res.body.should.deep.equal([{id: 1, clients: {id: 1}}, {id: 5, clients: null}]);
         });
 
         it('TODO: rows with no children return [] instead of null', async function() {
-            const res = await chai.request(app).get('/projects?id=in.5&select=id,tasks{id}');
+            const res = await get('/projects?id=in.5&select=id,tasks{id}');
             res.body.should.deep.equal([{id: 5, tasks: []}]);
         });
 
@@ -321,7 +347,7 @@ describe('Query', function() {
         });
 
         it('TODO: requesting many<->many relation', async function() {
-            const res = await chai.request(app).get('/tasks?select=id,users{id}');
+            const res = await get('/tasks?select=id,users{id}');
             res.body.should.deep.equal([{id: 1, users: [{id: 1}, {id: 3}]},
                 {id: 2, users: [{id: 1}]}, {id: 3, users: [{id: 1}]}, {id: 4, users: [{id: 1}]},
                 {id: 5, users: [{id: 2}, {id: 3}]}, {id: 6, users: [{id: 2}]},
@@ -330,7 +356,7 @@ describe('Query', function() {
 
 
         it('TODO: requesting many<->many relation reverse', async function() {
-            const res = await chai.request(app).get('/users?select=id,tasks{id}');
+            const res = await get('/users?select=id,tasks{id}');
             res.body.should.deep.equal([{id: 1, tasks: [{id: 1}, {id: 2}, {id: 3}, {id: 4}]},
                 {id: 2, tasks: [{id: 5}, {id: 6}, {id: 7}]}, {id: 3, tasks: [{id: 1}, {id: 5}]}]);
         });
@@ -385,14 +411,14 @@ describe('Query', function() {
 
     describe('Plurality singular', function() {
         it('will select an existing object', async function() {
-            const res = await chai.request(app).get('/items?id=eq.5')
+            const res = await get('/items?id=eq.5')
                 .set('Prefer', 'plurality=singular');
             res.should.have.status(200);
             res.body.should.deep.equal({id: 5});
         });
 
         it('works in the presence of a range header', async function() {
-            const res = await chai.request(app).get('/items')
+            const res = await get('/items')
                 .set('Prefer', 'plurality=singular')
                 .set('Range', '0-9')
                 .set('Range-Unit', 'items');
@@ -410,13 +436,103 @@ describe('Query', function() {
         });
 
         it('TODO: can shape plurality singular object routes', async function() {
-            const res = await chai.request(app)
-                .get('/projects_view?id=eq.1&select=id,name,clients{*},tasks{id,name}')
+            const res = await get('/projects_view?id=eq.1&select=id,name,clients{*},tasks{id,name}')
                 .set('Prefer', 'plurality=singular');
 
             res.body.should.deep.equal({id: 1, name: 'Windows 7',
                 clients: {id: 1, name: 'Microsoft'},
                 tasks: [{id: 1, name: 'Design w7'}, {id: 2, name: 'Code w7'}]});
+        });
+    });
+
+    describe('remote procedure call', function() {
+        describe('a proc that returns a set', function() {
+            it('returns paginated results', async function() {
+                const res = await post('/rpc/getitemrange')
+                    .set('Range', '0-0')
+                    .set('Range-Unit', 'items')
+                    .send({
+                        min: 2,
+                        max: 4
+                    });
+                res.body.should.deep.equal([{id: 3}]);
+                res.should.have.header('Content-Range', '0-0/2');
+                res.should.have.status(206);
+            });
+
+            it('returns proper json', async function() {
+                const res = await post('/rpc/getitemrange')
+                    .send({min: 2, max: 4 });
+                res.body.should.deep.equal([{id: 3}, {id: 4}]);
+            });
+        });
+        describe('a proc that returns an empty rowset', function() {
+            it('returns empty json array', async function() {
+                const res = await post('/rpc/test_empty_rowset')
+                .send({});
+                res.body.should.deep.equal([]);
+            });
+        });
+
+        describe('a proc that returns plain text', function() {
+            it('returns proper json', async function() {
+                const res = await post('/rpc/sayhello')
+                    .send({name: 'world' });
+                res.body.should.deep.equal([{sayhello: 'Hello, world'}]);
+            });
+
+            it('TODO: can handle unicode', async function() {
+                const res = await post('/rpc/sayhello')
+                    .send({name: '￥' });
+                res.body.should.deep.equal([{sayhello: 'Hello, ￥'}]);
+            });
+        });
+
+        describe('improper input', function() {
+            it('TODO: rejects unknown content type even if payload is good', async function() {
+                const res = await fPost('/rpc/sayhello',
+                    {name: 'world'},
+                    {headers: {'Accept': 'audio/mpeg3'}})
+                res.should.have.status(415);
+            });
+            it('rejects malformed json payload', async function() {
+                const res = await fPost('/rpc/sayhello',
+                    'sdfsdf', {headers: {'Accept': 'application/json'}});
+                res.should.have.status(400);
+            });
+        });
+
+        describe('unsupported verbs', function() {
+            it('DELETE fails', async function() {
+                const res = await fDelete('/rpc/sayhello');
+                res.should.have.status(405);
+            });
+            it('PATCH fails', async function() {
+                const res = await fPatch('/rpc/sayhello');
+                res.should.have.status(405);
+            });
+            it('OPTIONS fails', async function() {
+                // NOTE: may change in a future postgrest version
+                const res = await fOptions('/rpc/sayhello');
+                res.should.have.status(405);
+            });
+            it('GET fails with 405 on unknown procs', async function() {
+                // NOTE: may change in a future postgrest version
+                const res = await appFetch('/rpc/fake');
+                res.should.have.status(405);
+            });
+            it('GET with 405 on known procs', async function() {
+                const res = await appFetch('/rpc/sayhello');
+                res.should.have.status(405);
+            });
+        });
+        it('executes the proc exactly once per request', async function() {
+            let res = await post('/rpc/callcounter')
+                .send({});
+            res.body.should.deep.equal([{callcounter: 1}]);
+            res = await post('/rpc/callcounter')
+                .send({});
+            res.body.should.deep.equal([{callcounter: 2}]);
         });
     });
 });
