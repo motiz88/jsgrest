@@ -12,6 +12,7 @@ SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 
+BEGIN;
 --
 -- Name: postgrest; Type: SCHEMA; Schema: -; Owner: -
 --
@@ -120,7 +121,7 @@ SET default_with_oids = false;
 -- Name: items; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE items (
+CREATE UNLOGGED TABLE items (
     id bigint NOT NULL
 );
 
@@ -224,7 +225,7 @@ SET search_path = postgrest, pg_catalog;
 -- Name: auth; Type: TABLE; Schema: postgrest; Owner: -
 --
 
-CREATE TABLE auth (
+CREATE UNLOGGED TABLE auth (
     id character varying NOT NULL,
     rolname name DEFAULT 'postgrest_test_author'::name NOT NULL,
     pass character(60) NOT NULL
@@ -237,7 +238,7 @@ SET search_path = private, pg_catalog;
 -- Name: article_stars; Type: TABLE; Schema: private; Owner: -
 --
 
-CREATE TABLE article_stars (
+CREATE UNLOGGED TABLE article_stars (
     article_id integer NOT NULL,
     user_id integer NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL
@@ -248,7 +249,7 @@ CREATE TABLE article_stars (
 -- Name: articles; Type: TABLE; Schema: private; Owner: -
 --
 
-CREATE TABLE articles (
+CREATE UNLOGGED TABLE articles (
     id integer NOT NULL,
     body text,
     owner name NOT NULL
@@ -283,7 +284,7 @@ CREATE VIEW articles AS
 -- Name: authors_only; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE authors_only (
+CREATE UNLOGGED TABLE authors_only (
     owner character varying NOT NULL,
     secret character varying NOT NULL
 );
@@ -293,7 +294,7 @@ CREATE TABLE authors_only (
 -- Name: auto_incrementing_pk; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE auto_incrementing_pk (
+CREATE UNLOGGED TABLE auto_incrementing_pk (
     id integer NOT NULL,
     nullable_string character varying,
     non_nullable_string character varying NOT NULL,
@@ -324,7 +325,7 @@ ALTER SEQUENCE auto_incrementing_pk_id_seq OWNED BY auto_incrementing_pk.id;
 -- Name: clients; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE clients (
+CREATE UNLOGGED TABLE clients (
     id integer NOT NULL,
     name text NOT NULL
 );
@@ -334,7 +335,7 @@ CREATE TABLE clients (
 -- Name: comments; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE comments (
+CREATE UNLOGGED TABLE comments (
     id integer NOT NULL,
     commenter_id integer NOT NULL,
     user_id integer NOT NULL,
@@ -347,7 +348,7 @@ CREATE TABLE comments (
 -- Name: complex_items; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE complex_items (
+CREATE UNLOGGED TABLE complex_items (
     id bigint NOT NULL,
     name text,
     settings pg_catalog.json,
@@ -359,7 +360,7 @@ CREATE TABLE complex_items (
 -- Name: compound_pk; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE compound_pk (
+CREATE UNLOGGED TABLE compound_pk (
     k1 integer NOT NULL,
     k2 integer NOT NULL,
     extra integer
@@ -370,7 +371,7 @@ CREATE TABLE compound_pk (
 -- Name: empty_table; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE empty_table (
+CREATE UNLOGGED TABLE empty_table (
     k character varying NOT NULL,
     extra character varying NOT NULL
 );
@@ -388,7 +389,7 @@ CREATE VIEW has_count_column AS
 -- Name: has_fk; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE has_fk (
+CREATE UNLOGGED TABLE has_fk (
     id bigint NOT NULL,
     auto_inc_fk integer,
     simple_fk character varying(255)
@@ -452,7 +453,7 @@ ALTER SEQUENCE items_id_seq OWNED BY items.id;
 -- Name: json; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE json (
+CREATE UNLOGGED TABLE json (
     data pg_catalog.json
 );
 
@@ -470,7 +471,7 @@ CREATE MATERIALIZED VIEW materialized_view AS
 -- Name: menagerie; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE menagerie (
+CREATE UNLOGGED TABLE menagerie (
     "integer" integer NOT NULL,
     double double precision NOT NULL,
     "varchar" character varying NOT NULL,
@@ -485,7 +486,7 @@ CREATE TABLE menagerie (
 -- Name: no_pk; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE no_pk (
+CREATE UNLOGGED TABLE no_pk (
     a character varying,
     b character varying
 );
@@ -495,7 +496,7 @@ CREATE TABLE no_pk (
 -- Name: nullable_integer; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE nullable_integer (
+CREATE UNLOGGED TABLE nullable_integer (
     a integer
 );
 
@@ -504,7 +505,7 @@ CREATE TABLE nullable_integer (
 -- Name: insertonly; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE insertonly (
+CREATE UNLOGGED TABLE insertonly (
     v text NOT NULL
 );
 
@@ -513,7 +514,7 @@ CREATE TABLE insertonly (
 -- Name: projects; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE projects (
+CREATE UNLOGGED TABLE projects (
     id integer NOT NULL,
     name text NOT NULL,
     client_id integer
@@ -535,7 +536,7 @@ CREATE VIEW projects_view AS
 -- Name: simple_pk; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE simple_pk (
+CREATE UNLOGGED TABLE simple_pk (
     k character varying NOT NULL,
     extra character varying NOT NULL
 );
@@ -545,7 +546,7 @@ CREATE TABLE simple_pk (
 -- Name: tasks; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE tasks (
+CREATE UNLOGGED TABLE tasks (
     id integer NOT NULL,
     name text NOT NULL,
     project_id integer
@@ -556,7 +557,7 @@ CREATE TABLE tasks (
 -- Name: tsearch; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE tsearch (
+CREATE UNLOGGED TABLE tsearch (
     text_search_vector tsvector
 );
 
@@ -565,7 +566,7 @@ CREATE TABLE tsearch (
 -- Name: users; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE users (
+CREATE UNLOGGED TABLE users (
     id integer NOT NULL,
     name text NOT NULL
 );
@@ -575,7 +576,7 @@ CREATE TABLE users (
 -- Name: users_projects; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE users_projects (
+CREATE UNLOGGED TABLE users_projects (
     user_id integer NOT NULL,
     project_id integer NOT NULL
 );
@@ -585,21 +586,21 @@ CREATE TABLE users_projects (
 -- Name: users_tasks; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE users_tasks (
+CREATE UNLOGGED TABLE users_tasks (
     user_id integer NOT NULL,
     task_id integer NOT NULL
 );
 
 
-CREATE TABLE "Escap3e;" (
+CREATE UNLOGGED TABLE "Escap3e;" (
 		"so6meIdColumn" integer primary key
 );
 
-CREATE TABLE "ghostBusters" (
+CREATE UNLOGGED TABLE "ghostBusters" (
 		"escapeId" integer not null references "Escap3e;"("so6meIdColumn")
 );
 
-CREATE TABLE "withUnique" (
+CREATE UNLOGGED TABLE "withUnique" (
     uni text UNIQUE,
     extra text
 );
@@ -608,7 +609,7 @@ CREATE TABLE "withUnique" (
 -- Name: array_vs_json; Type: TABLE; Schema: test; Owner: -
 --
 
-CREATE TABLE array_vs_json (
+CREATE UNLOGGED TABLE array_vs_json (
     json_data pg_catalog.json,
     jsonb_data pg_catalog.jsonb,
     ints integer[],
@@ -926,3 +927,5 @@ ALTER TABLE ONLY users_tasks
 --
 -- PostgreSQL database dump complete
 --
+
+COMMIT;

@@ -1,7 +1,7 @@
 --
 -- PostgreSQL database dump
 --
-
+BEGIN;
 -- Dumped from database version 9.5beta1
 -- Dumped by pg_dump version 9.5beta1
 
@@ -267,7 +267,9 @@ TRUNCATE TABLE "ghostBusters" CASCADE;
 INSERT INTO "ghostBusters" VALUES (1), (3), (5);
 
 TRUNCATE TABLE "withUnique" CASCADE;
-INSERT INTO "withUnique" VALUES ('nodup', 'blah')
+INSERT INTO "withUnique" VALUES ('nodup', 'blah');
 --
 -- PostgreSQL database dump complete
 --
+
+COMMIT;
