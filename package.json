@@ -61,7 +61,7 @@
     "glob": "^7.0.0",
     "glob-promise": "^1.0.6",
     "istanbul": "^1.0.0-alpha.2",
-    "jscodeshift": "^0.3.13",
+    "jscodeshift": "^0.3.21",
     "lodash": "^3.10.1",
     "longjohn": "^0.2.11",
     "mocha": "^2.4.5",
