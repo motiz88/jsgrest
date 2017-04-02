@@ -1,4 +1,6 @@
 # jsgrest
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/motiz88/jsgrest.svg)](https://greenkeeper.io/)
 [![Build Status](https://travis-ci.org/motiz88/jsgrest.svg?branch=master)]
 (https://travis-ci.org/motiz88/jsgrest)
 [![Coverage Status](https://coveralls.io/repos/github/motiz88/jsgrest/badge.svg?branch=master)]
