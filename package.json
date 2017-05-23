@@ -73,7 +73,7 @@
     "nodemon": "^1.8.1",
     "pegjs": "^0.9.0",
     "shell-escape-tag": "^1.0.0",
-    "sinon": "^1.17.3",
+    "sinon": "^2.3.1",
     "sinon-chai": "^2.8.0",
     "source-map-support": "^0.4.0"
   },
