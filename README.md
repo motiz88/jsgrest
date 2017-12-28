@@ -1,13 +1,11 @@
 # jsgrest
-[![Build Status](https://travis-ci.org/motiz88/jsgrest.svg?branch=master)]
-(https://travis-ci.org/motiz88/jsgrest)
-[![Coverage Status](https://coveralls.io/repos/github/motiz88/jsgrest/badge.svg?branch=master)]
-(https://coveralls.io/github/motiz88/jsgrest?branch=master)
+[![Build Status](https://travis-ci.org/motiz88/jsgrest.svg?branch=master)](https://travis-ci.org/motiz88/jsgrest)
+[![Coverage Status](https://coveralls.io/repos/github/motiz88/jsgrest/badge.svg?branch=master)](https://coveralls.io/github/motiz88/jsgrest?branch=master)
 
 Postgres REST API server in JavaScript (a la PostgREST).
 
 This is a bare-bones reimplementation of [@begriffs](https://github.com/begriffs)'s fantastic
-    [PostgREST] (https://github.com/begriffs/postgrest) in JavaScript.
+    [PostgREST](https://github.com/begriffs/postgrest) in JavaScript.
 
 # Installing
 
