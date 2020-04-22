@@ -50,7 +50,7 @@
     "chai-things": "^0.2.0",
     "chokidar-cli": "^1.2.0",
     "coveralls": "^2.11.6",
-    "cross-env": "^1.0.7",
+    "cross-env": "^4.0.0",
     "dependency-check": "^2.5.1",
     "documentation": "^3.0.4",
     "eclint": "^1.1.5",
